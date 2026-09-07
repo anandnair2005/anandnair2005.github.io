@@ -1,0 +1,36 @@
+---
+layout: default
+---
+<article class="post">
+  <div class="post-head">
+    {%- if page.series %}{% include series-nav.html %}{% endif %}
+    <h1>{{ page.title }}</h1>
+    {%- if page.subtitle %}
+    <p class="sub">{{ page.subtitle }}</p>
+    {%- endif %}
+    <div class="byline">
+      <img src="{{ '/assets/img/avatar.png' | relative_url }}" alt="">
+      <div>
+        <div>{{ site.author }}</div>
+        <div>
+          <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%b %-d, %Y" }}</time>
+          &middot; {{ content | number_of_words | divided_by: 200 | plus: 1 }} min read
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="post-body">
+    {{ content }}
+  </div>
+
+  <div class="post-foot">
+    {%- for t in page.tags %}
+    <a class="pill" href="{{ '/tags/' | relative_url }}#{{ t | slugify }}">{{ t }}</a>
+    {%- endfor %}
+    {%- if page.canonical_url %}
+    <p class="muted">Also published on
+      <a href="{{ page.canonical_url }}">Medium</a>.</p>
+    {%- endif %}
+  </div>
+</article>

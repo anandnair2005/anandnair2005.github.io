@@ -1,0 +1,212 @@
+/* -------------------------------------------------------------------------
+   Palette and type scale follow Medium's own CSS custom properties,
+   read from the live site: #242424 ink, #6b6b6b secondary,
+   #1a8917 accent, #e5e5e5 / #f2f2f2 rules.
+   ------------------------------------------------------------------------- */
+
+:root {
+  --ink: #242424;
+  --ink-2: #6b6b6b;
+  --line: #e5e5e5;
+  --line-2: #f2f2f2;
+  --accent: #1a8917;
+  --bg: #ffffff;
+
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --serif: Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
+  --mono: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+
+  --wide: 1200px;   /* figure / table breakout width */
+  --read: 680px;    /* reading measure, matches Medium */
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;         /* guard for the figure breakout below */
+}
+
+a { color: inherit; }
+img { max-width: 100%; }
+
+.wrap { max-width: var(--wide); margin: 0 auto; padding: 0 24px; }
+
+/* --------- header --------- */
+
+.site-head {
+  border-bottom: 1px solid var(--line-2);
+  position: sticky; top: 0; z-index: 10;
+  background: var(--bg);
+}
+.site-head .wrap {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+.brand {
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 700; font-size: 20px; letter-spacing: -0.02em;
+  text-decoration: none;
+}
+.brand img { width: 32px; height: 32px; border-radius: 50%; display: block; }
+.nav a {
+  margin-left: 24px; font-size: 14px; color: var(--ink-2); text-decoration: none;
+}
+.nav a:hover { color: var(--ink); }
+
+/* --------- masthead --------- */
+
+.masthead { border-bottom: 1px solid var(--line); padding: 64px 0 48px; }
+.masthead h1 {
+  margin: 0 0 16px;
+  font-size: 64px; line-height: 1.05; letter-spacing: -0.03em; font-weight: 700;
+}
+.masthead p { margin: 0; max-width: 640px; font-size: 20px; color: var(--ink-2); }
+
+/* --------- story cards --------- */
+
+.feed { padding: 8px 0 64px; }
+
+.card {
+  display: flex; gap: 32px; align-items: flex-start;
+  padding: 32px 0; border-bottom: 1px solid var(--line-2);
+}
+.card-body { flex: 1; min-width: 0; }
+.card-meta { font-size: 13px; color: var(--ink-2); margin-bottom: 8px; }
+.card-title { margin: 0 0 6px; font-size: 22px; line-height: 1.25; letter-spacing: -0.01em; }
+.card-title a { text-decoration: none; }
+.card-title a:hover { color: #000; }
+.card-sub { margin: 0 0 12px; font-size: 16px; color: var(--ink-2); }
+.card-thumb { flex: 0 0 200px; display: block; }
+.card-thumb img {
+  width: 200px; height: 120px; object-fit: cover; display: block;
+  border: 1px solid var(--line-2);
+}
+
+.pill {
+  display: inline-block; margin: 0 6px 6px 0; padding: 4px 12px;
+  border-radius: 100px; background: var(--line-2); color: var(--ink-2);
+  font-size: 12px; text-decoration: none;
+}
+a.pill:hover { background: var(--line); color: var(--ink); }
+
+.series-flag { font-size: 13px; font-weight: 600; color: var(--accent); margin-bottom: 6px; }
+.series-flag a { color: var(--accent); }
+
+/* --------- article --------- */
+
+.post { padding: 56px 0 80px; }
+.post-head, .post-body { max-width: var(--read); margin-left: auto; margin-right: auto; }
+
+.post-head h1 { margin: 0 0 12px; font-size: 44px; line-height: 1.15; letter-spacing: -0.02em; }
+.post-head .sub { margin: 0 0 28px; font-size: 21px; color: var(--ink-2); line-height: 1.4; }
+.byline {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 14px; color: var(--ink-2);
+  border-bottom: 1px solid var(--line-2); padding-bottom: 24px; margin-bottom: 40px;
+}
+.byline img { width: 40px; height: 40px; border-radius: 50%; }
+
+.post-body { font-family: var(--serif); font-size: 20px; line-height: 1.7; }
+.post-body h2 { font-family: var(--sans); font-size: 30px; letter-spacing: -0.02em; margin: 48px 0 12px; }
+.post-body h3 { font-family: var(--sans); font-size: 23px; margin: 36px 0 8px; }
+.post-body a { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
+.post-body ul, .post-body ol { padding-left: 24px; }
+.post-body li { margin: 8px 0; }
+
+.post-body code {
+  font-family: var(--mono); font-size: 0.82em;
+  background: var(--line-2); padding: 2px 5px; border-radius: 3px;
+}
+.post-body pre {
+  font-family: var(--mono); font-size: 14px; line-height: 1.5;
+  background: #f7f7f7; border: 1px solid var(--line-2);
+  padding: 16px; overflow-x: auto;
+}
+.post-body pre code { background: none; padding: 0; font-size: inherit; }
+
+.post-body blockquote {
+  margin: 24px 0; padding-left: 20px;
+  border-left: 3px solid var(--ink); color: var(--ink-2);
+}
+
+/* Figures and tables break out of the 680px measure.
+   The generated figures are 1400px wide; at reading width the token
+   labels inside them would be illegible. min() keeps the breakout
+   inside the viewport so it never creates a horizontal scrollbar. */
+.post-body figure,
+.post-body p > img {
+  display: block;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  width: min(var(--wide), calc(100vw - 48px));
+  max-width: none;
+  margin-top: 40px; margin-bottom: 40px;
+}
+.post-body figure img { display: block; width: 100%; height: auto; }
+.post-body figure img,
+.post-body p > img { border: 1px solid var(--line-2); }
+.post-body figcaption {
+  max-width: var(--read); margin: 12px auto 0;
+  font-family: var(--sans); font-size: 14px; color: var(--ink-2); text-align: center;
+}
+
+.post-body table {
+  display: block; overflow-x: auto;
+  margin-left: 50%; transform: translateX(-50%);
+  width: min(var(--wide), calc(100vw - 48px));
+  margin-top: 32px; margin-bottom: 32px;
+  border-collapse: collapse;
+  font-family: var(--sans); font-size: 15px;
+}
+.post-body th, .post-body td {
+  border: 1px solid var(--line); padding: 10px 14px;
+  text-align: left; vertical-align: top;
+}
+.post-body th { background: #fafafa; font-weight: 600; }
+
+.post-foot {
+  max-width: var(--read); margin: 56px auto 0;
+  padding-top: 24px; border-top: 1px solid var(--line-2);
+}
+
+/* --------- simple pages --------- */
+
+.page { padding: 56px 0 80px; }
+.page-inner { max-width: var(--read); margin: 0 auto; }
+.page-inner h1 { font-size: 40px; letter-spacing: -0.02em; margin: 0 0 24px; }
+.page-inner h2 { font-size: 24px; margin: 40px 0 12px; }
+.page-inner ul { padding-left: 20px; }
+.page-inner li { margin: 10px 0; }
+.muted { color: var(--ink-2); font-size: 14px; }
+
+/* --------- footer --------- */
+
+.site-foot {
+  border-top: 1px solid var(--line-2); padding: 40px 0;
+  color: var(--ink-2); font-size: 14px;
+}
+.site-foot a { color: var(--ink-2); }
+
+/* --------- responsive --------- */
+
+@media (max-width: 800px) {
+  .masthead { padding: 40px 0 32px; }
+  .masthead h1 { font-size: 40px; }
+  .masthead p { font-size: 17px; }
+  .post-head h1 { font-size: 32px; }
+  .post-head .sub { font-size: 18px; }
+  .post-body { font-size: 18px; }
+  .post-body h2 { font-size: 24px; }
+  .card { gap: 16px; padding: 24px 0; }
+  .card-title { font-size: 18px; }
+  .card-sub { font-size: 14px; }
+  .card-thumb { flex: 0 0 100px; }
+  .card-thumb img { width: 100px; height: 70px; }
+  .nav a { margin-left: 16px; }
+}

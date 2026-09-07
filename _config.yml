@@ -1,0 +1,37 @@
+title: Anand Nair
+tagline: An exploration into the magical world of AI and software technology
+description: >-
+  Deep dives into AI and software systems: training runs, GPU internals,
+  and the engineering underneath.
+author: Anand Nair
+url: https://anandnair.dev
+baseurl: ""
+
+# Where syndicated copies live. Referenced in the footer only.
+medium_publication: https://medium.com/indistinguishable-from-magic-ai
+github_username: anandnair2005
+
+permalink: /posts/:title/
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor
