@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 628" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica,Arial,sans-serif'" role="img" aria-label="Attention window per layer. 18 of 24 layers attend to only 512 tokens.">
+<rect width="1000" height="628" fill="#333333"/>
+<text x="96" y="26" font-size="17" fill="#DDDDDD"><tspan fill="#58C4DD" font-weight="600">18 of 24</tspan> layers attend to only <tspan font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono','Menlo,monospace'">512</tspan> tokens</text>
+<rect x="96.0" y="44.0" width="216.0" height="16.0" rx="2" fill="#58C4DD"/>
+<rect x="96.0" y="66.0" width="216.0" height="16.0" rx="2" fill="#58C4DD"/>
+<rect x="96.0" y="88.0" width="216.0" height="16.0" rx="2" fill="#58C4DD"/>
+<rect x="96.0" y="110.0" width="864.0" height="16.0" rx="2" fill="#F0AC5F"/>
+<rect x="96.0" y="132.0" width="216.0" height="16.0" rx="2" fill="#58C4DD"/>
+<rect x="96.0" y="154.0" width="216.0" height="16.0" rx="2" fill="#58C4DD"/>
+<rect x="96.0" y="176.0" width="216.0" height="16.0" rx="2" fill="#58C4DD"/>
+<rect x="96.0" y="198.0" width="864.0" height="16.0" rx="2" fill="#F0AC5F"/>
+<rect x="96.0" y="220.0" width="216.0" height="16.0" rx="2" fill="#58C4DD"/>
+<rect x="96.0" y="242.0" width="216.0" height="16.0" rx="2" fill="#58C4DD"/>
+<rect x="96.0" y="264.0" width="216.0" height="16.0" rx="2" fill="#58C4DD"/>
+<rect x="96.0" y="286.0" width="864.0" height="16.0" rx="2" fill="#F0AC5F"/>
+<rect x="96.0" y="308.0" width="216.0" height="16.0" rx="2" fill="#58C4DD"/>
+<rect x="96.0" y="330.0" width="216.0" height="16.0" rx="2" fill="#58C4DD"/>
+<rect x="96.0" y="352.0" width="216.0" height="16.0" rx="2" fill="#58C4DD"/>
+<rect x="96.0" y="374.0" width="864.0" height="16.0" rx="2" fill="#F0AC5F"/>
+<rect x="96.0" y="396.0" width="216.0" height="16.0" rx="2" fill="#58C4DD"/>
+<rect x="96.0" y="418.0" width="216.0" height="16.0" rx="2" fill="#58C4DD"/>
+<rect x="96.0" y="440.0" width="216.0" height="16.0" rx="2" fill="#58C4DD"/>
+<rect x="96.0" y="462.0" width="864.0" height="16.0" rx="2" fill="#F0AC5F"/>
+<rect x="96.0" y="484.0" width="216.0" height="16.0" rx="2" fill="#58C4DD"/>
+<rect x="96.0" y="506.0" width="216.0" height="16.0" rx="2" fill="#58C4DD"/>
+<rect x="96.0" y="528.0" width="216.0" height="16.0" rx="2" fill="#58C4DD"/>
+<rect x="96.0" y="550.0" width="864.0" height="16.0" rx="2" fill="#F0AC5F"/>
+<text x="82.0" y="56.0" font-size="13" fill="#888888" text-anchor="end">layer 0</text>
+<text x="82.0" y="562.0" font-size="13" fill="#888888" text-anchor="end">layer 23</text>
+<line x1="312.0" y1="36.0" x2="312.0" y2="576.0" stroke="#736357" stroke-width="1" stroke-dasharray="3 4"/>
+<text x="312.0" y="596.0" font-size="14" fill="#888888" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono','Menlo,monospace'">512</text>
+<line x1="960.0" y1="36.0" x2="960.0" y2="576.0" stroke="#736357" stroke-width="1" stroke-dasharray="3 4"/>
+<text x="960.0" y="596.0" font-size="14" fill="#888888" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono','Menlo,monospace'">2,048</text>
+<text x="96.0" y="618.0" font-size="13" fill="#888888" text-anchor="start">attention window, in tokens</text>
+</svg>

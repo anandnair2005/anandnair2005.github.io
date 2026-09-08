@@ -35,3 +35,6 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - vendor
+  - preview-*.html
+  - figures/export-png.html
+  - figures/__pycache__

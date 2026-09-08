@@ -7,3 +7,15 @@ vendor/
 .bundle/
 .DS_Store
 inputs/
+__pycache__/
+
+# Local scratch preview of a post rendered outside Jekyll. Not a source of
+# truth - the post in _posts/ is. Kept out of the repo so a stale copy of the
+# prose can never sit alongside the real one.
+preview-*.html
+
+# Python virtual environment
+.venv/
+venv/
+
+transcribe/

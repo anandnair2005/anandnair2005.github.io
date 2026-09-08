@@ -1,0 +1,52 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Figure PNG export (for Medium)</title>
+<!--
+  Medium accepts .JPG / .JPEG / .GIF / .PNG only - not SVG - and wants images
+  at least 1192px wide for all placement options. This page renders each SVG
+  at 2x (2000px wide) so a screenshot of the element is a publish-ready PNG.
+
+  Manual use:  open this file, pick a figure, screenshot the black canvas.
+  Scripted:    drive renderAt2x(name) then clip-screenshot to figures/png/.
+
+  The committed PNGs in figures/png/ are already built; regenerate only when a
+  figure changes.
+-->
+<style>
+  html, body { margin: 0; padding: 0; background: #333; }
+  #slot svg { display: block; }
+  #bar { font: 13px system-ui; color: #ddd; padding: 8px 12px; background: #222; }
+  #bar button { font: 12px system-ui; margin-right: 6px; cursor: pointer; }
+</style>
+<div id="bar"></div>
+<div id="slot"></div>
+<script>
+  const FIGURES = ['repo-map', 'depth-cascade', 'sssl-window',
+                   'precision-map', 'optimizer-step', 'bestfit-packing'];
+  const SCALE = 2;
+
+  window.renderAt2x = async function (name) {
+    const res = await fetch(name + '.svg');
+    if (!res.ok) throw new Error('missing ' + name + '.svg');
+    document.getElementById('slot').innerHTML = await res.text();
+    const svg = document.querySelector('#slot svg');
+    const [, , w, h] = svg.getAttribute('viewBox').split(' ').map(Number);
+    svg.setAttribute('width', w * SCALE);
+    svg.setAttribute('height', h * SCALE);
+    return { w: w * SCALE, h: h * SCALE };
+  };
+
+  const bar = document.getElementById('bar');
+  FIGURES.forEach(function (f) {
+    const b = document.createElement('button');
+    b.textContent = f;
+    b.onclick = function () {
+      renderAt2x(f).then(function (d) {
+        bar.lastChild.textContent = '   ' + f + '.svg -> ' + d.w + 'x' + d.h +
+          '   (Medium min 1192px: ' + (d.w >= 1192 ? 'ok' : 'TOO NARROW') + ')';
+      });
+    };
+    bar.appendChild(b);
+  });
+  bar.appendChild(document.createTextNode('   pick a figure'));
+</script>
