@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 426" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica,Arial,sans-serif'" role="img" aria-label="One optimizer step across four ranks. Gradients stay local through eight accumulation steps, then reduce-scatter, local update and all-gather.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 426" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" role="img" aria-label="One optimizer step across four ranks. Gradients stay local through eight accumulation steps, then reduce-scatter, local update and all-gather.">
 <rect width="1000" height="426" fill="#333333"/>
 <text x="40" y="30" font-size="17" fill="#DDDDDD">The model is never DDP-wrapped — <tspan fill="#F0AC5F" font-weight="600">the optimizer owns synchronisation</tspan></text>
-<text x="40.0" y="56.0" font-size="13" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono','Menlo,monospace'">4 ranks x 16 x 2,048 tokens x 8 accumulation steps = 1,048,576 tokens per step</text>
+<text x="40.0" y="56.0" font-size="13" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">4 ranks x 16 x 2,048 tokens x 8 accumulation steps = 1,048,576 tokens per step</text>
 <text x="320.6" y="88.0" font-size="13" fill="#58C4DD" text-anchor="middle" font-weight="600">forward + backward</text>
 <text x="605.8" y="88.0" font-size="13" fill="#9A72AC" text-anchor="middle" font-weight="600">reduce_scatter</text>
 <text x="744.0" y="88.0" font-size="13" fill="#F0AC5F" text-anchor="middle" font-weight="600">local update</text>

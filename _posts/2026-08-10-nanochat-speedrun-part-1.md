@@ -105,7 +105,7 @@ The detail I did not expect is in sliding-window attention.
 NanoChat tiles a pattern string across layers. The default is `SSSL`, where `L` is full context and `S` is shorter. Reading `_compute_window_sizes`:
 
 ```python
-short_window = -(long_window // 4 // 128) * 128  # ceil to FA3 tile size
+short_window = -(-long_window // 4 // 128) * 128  # ceil to FA3 tile size
 ```
 
 At `sequence_len = 2048` that is **512** – a quarter of the context, rounded to a tile boundary. So with `SSSL` tiled across 24 layers, layers 3, 7, 11, 15, 19 and 23 get full context, and the other eighteen see 512 tokens.
@@ -273,11 +273,13 @@ Reading code and predicting behaviour are different activities, and only the sec
 | 3 | FP8 converts exactly `145` of `158` linear layers, skipping `13` | A different count, or different layers |
 | 4 | Total tokens trained is exactly `5,568 × 1,048,576 = 5,838,471,168` | Any remainder, which would mean padding somewhere |
 | 5 | FA3 activates on H100 and says so | The run falls back to SDPA |
-| 6 | Base training is GPU-bound, so half the GPUs should take roughly twice as long as the 8xH100 reference of 1.65 h | Materially better or worse than about 2x |
+| 6 | Base training is GPU-bound, so half the GPUs should take roughly twice as long as the 8×H100 reference of 1.65 h | Materially better or worse than about 2x |
 | 7 | Utilization is high and *stable* – not a good average hiding a bad distribution | MFU that sags, spikes, or decays across the run |
 | 8 | The whole thing lands well under the old $100 GPT-2 line | It does not |
 
 The first five are checkable from the run log alone. The last three need the run to finish.
+
+If most of these hold, the interesting claim is not "NanoChat is fast." It is that a codebase simple enough to read in an afternoon can be this specific about what it is doing, and be right.
 
 ## What I am not testing
 

@@ -28,16 +28,16 @@ MUTED = "#888888"    # grey_c
 DIM = "#555555"
 
 SANS = ("-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,"
-        "'Helvetica,Arial,sans-serif'")
+        "Helvetica,Arial,sans-serif")
 MONO = ("ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',"
-        "'Menlo,monospace'")
+        "Menlo,monospace")
 
 OUT = os.path.dirname(os.path.abspath(__file__))
 
 
 def esc(s):
     return (str(s).replace("&", "&amp;").replace("<", "&lt;")
-            .replace(">", "&gt;").replace("'", "&quot;"))
+            .replace(">", "&gt;").replace('"', "&quot;"))
 
 
 class Fig:

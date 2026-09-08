@@ -37,4 +37,5 @@ exclude:
   - vendor
   - preview-*.html
   - figures/export-png.html
+  - figures/png-export-prompt.md
   - figures/__pycache__
