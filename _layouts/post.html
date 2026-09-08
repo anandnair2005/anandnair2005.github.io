@@ -14,7 +14,7 @@ layout: default
         <div>{{ site.author }}</div>
         <div>
           <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%b %-d, %Y" }}</time>
-          &middot; {{ content | number_of_words | divided_by: 200 | plus: 1 }} min read
+          &middot; {{ content | strip_html | number_of_words | divided_by: 265 | plus: 1 }} min read
         </div>
       </div>
     </div>
@@ -30,7 +30,8 @@ layout: default
     {%- endfor %}
     {%- if page.canonical_url %}
     <p class="muted">Also published on
-      <a href="{{ page.canonical_url }}">Medium</a>.</p>
+      <a href="{{ page.canonical_url }}">Medium</a>.
+    </p>
     {%- endif %}
   </div>
 </article>

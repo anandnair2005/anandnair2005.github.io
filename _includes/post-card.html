@@ -1,11 +1,11 @@
 {%- assign p = include.post -%}
-{%- assign words = p.content | number_of_words -%}
+{%- assign words = p.content | strip_html | number_of_words -%}
 <article class="card">
   <div class="card-body">
     <div class="card-meta">
       {{ site.author }} &middot;
       <time datetime="{{ p.date | date_to_xmlschema }}">{{ p.date | date: "%b %-d, %Y" }}</time>
-      &middot; {{ words | divided_by: 200 | plus: 1 }} min read
+      &middot; {{ words | divided_by: 265 | plus: 1 }} min read
     </div>
     {%- if p.series %}
     <div class="series-flag">{{ p.series }} &middot; Part {{ p.part }}</div>
