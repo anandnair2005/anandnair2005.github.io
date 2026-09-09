@@ -1,6 +1,6 @@
 ---
 title: "NanoChat Speedrun, Part 1: The Code That Makes H100s Go Brrrr"
-subtitle: "What I expected before spending anything on GPUs – a close reading of NanoChat's training stack, and the predictions it let me make."
+subtitle: "What I expected before spending anything on GPUs &mdash; a close reading of NanoChat's training stack, and the predictions it let me make."
 date: 2026-08-10
 series: "The NanoChat Speedrun"
 part: 1
@@ -10,11 +10,11 @@ image: /figures/sssl-window.svg
 
 > **Disclosure:** I used AI assistance to edit and refine this post, but the ideas, interpretations, and conclusions are mine.
 
-> **Read the repo alongside this.** Everything below is a close reading of a specific codebase, and it will land far better if you have [NanoChat](https://github.com/karpathy/nanochat/tree/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496) open in another window. It is small enough to skim in an evening. Every claim here links to the exact file and line it came from – follow a few of them, and disagree with me where you find something I misread.
+> **Read the repo alongside this.** Everything below is a close reading of a specific codebase, and it will land far better if you have [NanoChat](https://github.com/karpathy/nanochat/tree/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496) open in another window. It is small enough to skim in an evening. Every claim here links to the exact file and line it came from &mdash; follow a few of them, and disagree with me where you find something I misread.
 
 I have read a lot about transformers. Books, papers, tutorial series, the usual conference talks. Before this I would have told you I understood how they were trained.
 
-Then in early 2026 I sat down with Andrej Karpathy's [NanoChat](https://github.com/karpathy/nanochat/tree/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496) and read it properly – not skimmed, read – and learned more in a fortnight than I had from any of it. Not because the code is clever in a way that shows off. Because it is simple in a way that clearly took enormous effort to arrive at, and because almost every line turns out to be load-bearing once you ask why it is there.
+Then in early 2026 I sat down with Andrej Karpathy's [NanoChat](https://github.com/karpathy/nanochat/tree/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496) and read it properly &mdash; not skimmed, read &mdash; and learned more in a fortnight than I had from any of it. Not because the code is clever in a way that shows off. Because it is simple in a way that clearly took enormous effort to arrive at, and because almost every line turns out to be load-bearing once you ask why it is there.
 
 NanoChat describes itself as a simple experimental harness for training LLMs on a single GPU node: tokenization, pretraining, fine-tuning, evaluation, inference, and a chat UI. It is small enough that a motivated reader can hold the whole thing in their head. That is the trick, and it is not an accident.
 
@@ -22,7 +22,7 @@ This post is the first half of a pair, and deliberately the half with no results
 
 That order matters. It is easy to explain why something was fast after watching it be fast. It is harder, and more honest, to commit to the prediction first.
 
-One note on lineage: NanoChat's README credits [`modded-nanogpt`](https://github.com/KellerJordan/modded-nanogpt) for the speedrun framing and borrows some implementation from it, but they are not the same benchmark – `modded-nanogpt` races to a target validation loss, while NanoChat's speedrun spans tokenizer through chat evaluation. Ancestry, not comparison.
+One note on lineage: NanoChat's README credits [`modded-nanogpt`](https://github.com/KellerJordan/modded-nanogpt) for the speedrun framing and borrows some implementation from it, but they are not the same benchmark &mdash; `modded-nanogpt` races to a target validation loss, while NanoChat's speedrun spans tokenizer through chat evaluation. Ancestry, not comparison.
 
 ---
 
@@ -46,7 +46,7 @@ One scope note. The reference speedrun path runs SFT and chat evaluation but not
 
 Here is the design choice that made me pay attention.
 
-NanoChat does not ask you to tune anything to get started. The README describes a single complexity dial – the depth of the transformer – and [`scripts/base_train.py`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/scripts/base_train.py) means it literally. From `--depth`, the script derives model width, attention head count, parameter count, training horizon, global batch size, learning-rate scaling, and weight decay.
+NanoChat does not ask you to tune anything to get started. The README describes a single complexity dial &mdash; the depth of the transformer &mdash; and [`scripts/base_train.py`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/scripts/base_train.py) means it literally. From `--depth`, the script derives model width, attention head count, parameter count, training horizon, global batch size, learning-rate scaling, and weight decay.
 
 The mechanism is a reference model. The `d12` configuration is treated as an empirically measured anchor: its compute-optimal token horizon and batch size come from NanoChat's own sweeps, recorded in [`dev/LOG.md`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/dev/LOG.md). Every other depth is extrapolated from that anchor using scaling-law relationships plus a few hardware constraints.
 
@@ -63,9 +63,9 @@ depth
   → learning-rate and weight-decay scaling
 ```
 
-No single step here is exotic. What is unusual is the discipline of routing all of them through one user-facing number – and then printing the derivation so you can check it.
+No single step here is exotic. What is unusual is the discipline of routing all of them through one user-facing number &mdash; and then printing the derivation so you can check it.
 
-The rounding step shows the layering. `base_dim` is `depth × 64`, which for depth 24 gives 1536, then rounded up to a multiple of `head_dim` – which for 1536 does nothing. The constraint is there anyway, because attention heads must divide evenly and FA3 wants head dimensions it can tile. A depth producing an awkward width gets quietly nudged to a workable one rather than failing later inside a kernel.
+The rounding step shows the layering. `base_dim` is `depth × 64`, which for depth 24 gives 1536, then rounded up to a multiple of `head_dim` &mdash; which for 1536 does nothing. The constraint is there anyway, because attention heads must divide evenly and FA3 wants head dimensions it can tile. A depth producing an awkward width gets quietly nudged to a workable one rather than failing later inside a kernel.
 
 The full derivation, with the paper behind each rule, is in [Appendix B](#appendix-b). The short version: batch size follows [Power Lines](https://arxiv.org/abs/2505.13738), scaling roughly as `D^0.383`; learning rate follows standard square-root batch scaling; weight decay follows the [T_epoch framework](https://arxiv.org/abs/2405.13698), keeping `B / (η × λ × D)` approximately constant.
 
@@ -75,7 +75,7 @@ The full derivation, with the paper behind each rule, is in [Appendix B](#append
 
 I reproduced this derivation by hand for depth 24 before running anything, which gives Part 2 its first thing to check.
 
-> **What I expect to see** – Running `--depth=24` should print `model_dim 1536`, `num_heads 12`, a global batch of `1,048,576` tokens, an LR scale of `1.4142`, an AdamW LR scale of `0.707107`, and `5,568` iterations. If any of those differ, I have misread the code.
+> **What I expect to see** &mdash; Running `--depth=24` should print `model_dim 1536`, `num_heads 12`, a global batch of `1,048,576` tokens, an LR scale of `1.4142`, an AdamW LR scale of `0.707107`, and `5,568` iterations. If any of those differ, I have misread the code.
 
 ---
 
@@ -94,7 +94,7 @@ token embedding
   → lm_head
 ```
 
-The two unfamiliar names are both small and cheap. The *smear* mixes a little of the previous token's embedding into the current one through a learned gate – bigram-like information for almost no compute. The *backout* subtracts a cached mid-layer residual before the final norm, removing low-level features the output layer does not need. Neither is a headline idea. Both are the kind of thing you add after watching a lot of training curves.
+The two unfamiliar names are both small and cheap. The *smear* mixes a little of the previous token's embedding into the current one through a learned gate &mdash; bigram-like information for almost no compute. The *backout* subtracts a cached mid-layer residual before the final norm, removing low-level features the output layer does not need. Neither is a headline idea. Both are the kind of thing you add after watching a lot of training curves.
 
 `--depth` sets the number of repeated `Block` modules, and the rest of the model shape follows from the cascade above. The parameter-by-parameter breakdown is in [Appendix A](#appendix-a).
 
@@ -108,15 +108,15 @@ NanoChat tiles a pattern string across layers. The default is `SSSL`, where `L` 
 short_window = -(-long_window // 4 // 128) * 128  # ceil to FA3 tile size
 ```
 
-At `sequence_len = 2048` that is **512** – a quarter of the context, rounded to a tile boundary. So with `SSSL` tiled across 24 layers, layers 3, 7, 11, 15, 19 and 23 get full context, and the other eighteen see 512 tokens.
+At `sequence_len = 2048` that is **512** &mdash; a quarter of the context, rounded to a tile boundary. So with `SSSL` tiled across 24 layers, layers 3, 7, 11, 15, 19 and 23 get full context, and the other eighteen see 512 tokens.
 
 Eighteen of twenty-four layers never look further back than a quarter of the sequence. Six layers carry every long-range interaction in the model. That is a far more aggressive bet than the phrase "sliding-window attention" suggests, and a large part of why the model is cheap to train.
 
-A final safety line, `window_sizes[-1] = (long_window, 0)`, forces the last layer to full context whatever the pattern says. For `SSSL` at depth 24 it changes nothing – layer 23 is already `L`. It only bites on a pattern ending in `S`.
+A final safety line, `window_sizes[-1] = (long_window, 0)`, forces the last layer to full context whatever the pattern says. For `SSSL` at depth 24 it changes nothing &mdash; layer 23 is already `L`. It only bites on a pattern ending in `S`.
 
 This is also the one place I found where the repository contradicts itself. The `--window-pattern` help text in [`base_train.py`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/scripts/base_train.py#L54) describes `S` as "half context", and the inline comment on the line above says `2048 -> 768`. The arithmetic gives 512, a quarter. The docstring one line further up says "quarter context" and is correct.
 
-The code is right and the comment is stale. In a repository built this carefully, that was genuinely the only inconsistency I found worth reporting – and it is a comment, not behaviour. Trust the arithmetic.
+The code is right and the comment is stale. In a repository built this carefully, that was genuinely the only inconsistency I found worth reporting &mdash; and it is a comment, not behaviour. Trust the arithmetic.
 
 ![Bar width is the attention window, so the ratio is the whole story](/figures/sssl-window.svg)
 
@@ -130,11 +130,11 @@ Everything above is design. This section is what I actually came for: the specif
 
 There are five mechanisms, and they are worth naming up front rather than scattering:
 
-1. **Fixed shapes and honest batch math** – so the compiler can specialize and the global batch never drifts.
-2. **Attention** – FA3 on Hopper, and nothing pretending to be FA3 elsewhere.
-3. **Precision** – FP8 where it is safe, and an explicit refusal where it is not.
-4. **Communication** – the optimizer owns synchronization instead of the model wrapper.
-5. **The data feeder** – dense, fixed-shape batches with no padding at all.
+1. **Fixed shapes and honest batch math** &mdash; so the compiler can specialize and the global batch never drifts.
+2. **Attention** &mdash; FA3 on Hopper, and nothing pretending to be FA3 elsewhere.
+3. **Precision** &mdash; FP8 where it is safe, and an explicit refusal where it is not.
+4. **Communication** &mdash; the optimizer owns synchronization instead of the model wrapper.
+5. **The data feeder** &mdash; dense, fixed-shape batches with no padding at all.
 
 That order runs from inside the model outward: shapes, then kernels, then numerics, then across GPUs, then the pipe feeding it all.
 
@@ -146,7 +146,7 @@ The compile call is one line and it sets the tone:
 model = torch.compile(model, dynamic=False)
 ```
 
-`dynamic=False` promises the compiler these shapes will not change, so it can specialize hard rather than emit code that handles anything. That is only a safe promise if the rest of the system genuinely never changes shape – which is why the dataloader later goes to such lengths to produce exactly-full rows.
+`dynamic=False` promises the compiler these shapes will not change, so it can specialize hard rather than emit code that handles anything. That is only a safe promise if the rest of the system genuinely never changes shape &mdash; which is why the dataloader later goes to such lengths to produce exactly-full rows.
 
 The batch arithmetic is equally direct:
 
@@ -156,35 +156,35 @@ world_tokens_per_fwdbwd = tokens_per_fwdbwd * ddp_world_size
 assert total_batch_size % world_tokens_per_fwdbwd == 0
 ```
 
-That assert does more work than it looks. `total_batch_size` is a property of the *experiment* – it comes out of the depth cascade and shapes the learning dynamics. `device_batch_size` is a property of the *machine*: however much fits in memory. Forcing the two to reconcile through gradient accumulation is what stops the effective batch quietly becoming whatever the hardware allowed.
+That assert does more work than it looks. `total_batch_size` is a property of the *experiment* &mdash; it comes out of the depth cascade and shapes the learning dynamics. `device_batch_size` is a property of the *machine*: however much fits in memory. Forcing the two to reconcile through gradient accumulation is what stops the effective batch quietly becoming whatever the hardware allowed.
 
-So GPU count becomes an execution detail rather than a hyperparameter. Run the same configuration on four GPUs instead of eight and you get twice the accumulation steps and an identical global batch. The model does not know how many GPUs it trained on. (In the same spirit, the script takes manual control of Python's garbage collector after the first step – the mark of someone who profiled their training loop and found GC pauses in it.)
+So GPU count becomes an execution detail rather than a hyperparameter. Run the same configuration on four GPUs instead of eight and you get twice the accumulation steps and an identical global batch. The model does not know how many GPUs it trained on. (In the same spirit, the script takes manual control of Python's garbage collector after the first step &mdash; the mark of someone who profiled their training loop and found GC pauses in it.)
 
-> **What I expect to see** – On four H100s with `device_batch_size=16` and `max_seq_len=2048`, that is `32,768` tokens per rank per micro-batch and `131,072` across four ranks. To reach a `1,048,576`-token global batch the script must choose exactly `8` gradient accumulation steps, and should say so.
+> **What I expect to see** &mdash; On four H100s with `device_batch_size=16` and `max_seq_len=2048`, that is `32,768` tokens per rank per micro-batch and `131,072` across four ranks. To reach a `1,048,576`-token global batch the script must choose exactly `8` gradient accumulation steps, and should say so.
 
 ### Attention: FA3, and only on Hopper
 
 [`nanochat/flash_attention.py`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/nanochat/flash_attention.py) tries to load Flash Attention 3, but only on Hopper-class GPUs, and falls back to PyTorch's SDPA everywhere else behind an API-compatible shim.
 
-What I like is the honesty of the fallback. It is not sold as equivalent. The training script warns that it is meaningfully less efficient, and warns harder if you combine it with sliding windows – a sliding-window mask through the generic path is expensive exactly where FA3 would be cheap. If you are not on Hopper, the advice is to stop pretending and use `--window-pattern=L`. Hardware-specific paths are labelled as such rather than hidden behind an abstraction that silently underperforms.
+What I like is the honesty of the fallback. It is not sold as equivalent. The training script warns that it is meaningfully less efficient, and warns harder if you combine it with sliding windows &mdash; a sliding-window mask through the generic path is expensive exactly where FA3 would be cheap. If you are not on Hopper, the advice is to stop pretending and use `--window-pattern=L`. Hardware-specific paths are labelled as such rather than hidden behind an abstraction that silently underperforms.
 
-> **What I expect to see** – On H100s the run should announce that FA3 is active. If it announces the SDPA fallback instead, every performance number afterwards is measuring something else.
+> **What I expect to see** &mdash; On H100s the run should announce that FA3 is active. If it announces the SDPA fallback instead, every performance number afterwards is measuring something else.
 
 ### Precision: what FP8 refuses to touch
 
 FP8 is where I expected to find hand-waving, and did not.
 
-[`base_train.py`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/scripts/base_train.py#L166-L193) exposes `--fp8`, and on CUDA it walks the model converting eligible `nn.Linear` modules. [`nanochat/fp8.py`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/nanochat/fp8.py) is deliberately small: tensorwise dynamic scaling, quantize, `torch._scaled_mm`, dequantize. Weights use `float8_e4m3fn`, gradients `float8_e5m2` – trading mantissa bits for range, because gradients need the range more.
+[`base_train.py`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/scripts/base_train.py#L166-L193) exposes `--fp8`, and on CUDA it walks the model converting eligible `nn.Linear` modules. [`nanochat/fp8.py`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/nanochat/fp8.py) is deliberately small: tensorwise dynamic scaling, quantize, `torch._scaled_mm`, dequantize. Weights use `float8_e4m3fn`, gradients `float8_e5m2` &mdash; trading mantissa bits for range, because gradients need the range more.
 
 The interesting word is *eligible*. The filter skips layers whose dimensions are not divisible by 16, and skips very small layers entirely. Neither rule is arbitrary: FP8 tensor-core paths have alignment requirements, and for a tiny matrix the quantize/dequantize overhead costs more than the faster multiply saves. `dev/LOG.md` adds that tensorwise scaling beat rowwise at this scale, and that the filtering was needed for stability. This is not a switch flipped because it was available.
 
-So I counted the modules by hand. A depth-24 model has 24 blocks, each with 6 linear matrices, plus the `lm_head`: 145 conversions. The layers that should fail the filter are the twelve `ve_gate` projections, each `Linear(12, 12)` – 12 is not divisible by 16 – and the single `smear_gate`, which is `Linear(24, 1)` and far below any sensible minimum. That is 13 skipped, 158 total.
+So I counted the modules by hand. A depth-24 model has 24 blocks, each with 6 linear matrices, plus the `lm_head`: 145 conversions. The layers that should fail the filter are the twelve `ve_gate` projections, each `Linear(12, 12)` &mdash; 12 is not divisible by 16 &mdash; and the single `smear_gate`, which is `Linear(24, 1)` and far below any sensible minimum. That is 13 skipped, 158 total.
 
 ![Every linear layer in the model, drawn at the same size so the proportion is honest](/figures/precision-map.svg)
 
 *Every linear layer in the model, drawn at the same size so the proportion is honest. The thirteen the filter refuses are not an oversight: twelve `ve_gate` projections that fail the divisible-by-16 rule, and one `smear_gate` far below any workable dimension.*
 
-> **What I expect to see** – The run should report converting exactly `145` of `158` linear layers and skipping `13`. If the numbers differ, my reading of the filter is wrong.
+> **What I expect to see** &mdash; The run should report converting exactly `145` of `158` linear layers and skipping `13`. If the numbers differ, my reading of the filter is wrong.
 
 ### Communication: the optimizer owns it
 
@@ -200,21 +200,21 @@ launch async reductions
   → wait for gathers, copy updated parameters back
 ```
 
-Each rank receives one slice of the gradient via `reduce_scatter`, updates only that slice, then `all_gather`s to rebuild the full parameter. Optimizer state is sharded across ranks – ZeRO-2 in style – so no rank holds a full copy of the Adam moments. For Muon parameters the code goes further, grouping tensors by shape so many small ones move as a few large ones.
+Each rank receives one slice of the gradient via `reduce_scatter`, updates only that slice, then `all_gather`s to rebuild the full parameter. Optimizer state is sharded across ranks &mdash; ZeRO-2 in style &mdash; so no rank holds a full copy of the Adam moments. For Muon parameters the code goes further, grouping tensors by shape so many small ones move as a few large ones.
 
-Three goals, all visible in the structure: overlap communication with computation, cut optimizer memory, batch small transfers into fewer large ones. And because it is an explicit phase rather than a hook buried in a wrapper's backward pass, you can *see* where the distributed boundary is. Gradients stay rank-local through all eight micro-batches – precisely where a DDP-wrapped model would already be all-reducing.
+Three goals, all visible in the structure: overlap communication with computation, cut optimizer memory, batch small transfers into fewer large ones. And because it is an explicit phase rather than a hook buried in a wrapper's backward pass, you can *see* where the distributed boundary is. Gradients stay rank-local through all eight micro-batches &mdash; precisely where a DDP-wrapped model would already be all-reducing.
 
 ![One step, four ranks, one time axis](/figures/optimizer-step.svg)
 
 *One step, four ranks, one time axis. The dashed line marks where an ordinary DDP-wrapped model would already have been all-reducing; here the gradients are still rank-local, and communication happens afterwards as an explicit async phase.*
 
-> **Not tested here** – I can read the design, but I have no profiler trace. I will not claim communication was actually hidden behind computation, only that the code is structured so it could be.
+> **Not tested here** &mdash; I can read the design, but I have no profiler trace. I will not claim communication was actually hidden behind computation, only that the code is structured so it could be.
 
 ### Feeding the GPUs
 
 Fast kernels are useless if the data pipe stalls, and this is the part of the repo I ended up admiring most.
 
-Training data is ClimbMix parquet shards. `speedrun.sh` grabs 8 first so tokenizer training can start, then downloads the remaining 170 in the background while tokenizer work proceeds – even the download is pipelined. `dev/LOG.md` calls the switch from FineWeb-EDU to ClimbMix the single biggest improvement to the speedrun time, 2h46m down to 2h01m, and enough of a gain to move the target from `d26` to `d24`. That is the repository's measurement, not mine.
+Training data is ClimbMix parquet shards. `speedrun.sh` grabs 8 first so tokenizer training can start, then downloads the remaining 170 in the background while tokenizer work proceeds &mdash; even the download is pipelined. `dev/LOG.md` calls the switch from FineWeb-EDU to ClimbMix the single biggest improvement to the speedrun time, 2h46m down to 2h01m, and enough of a gain to move the target from `d26` to `d24`. That is the repository's measurement, not mine.
 
 The runtime loader in [`nanochat/dataloader.py`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/nanochat/dataloader.py) uses BOS-aligned best-fit packing. Every row begins with a BOS token. The inner loop is:
 
@@ -236,17 +236,17 @@ The result is 100% utilization. No padding, ever. Every token in every batch is 
 
 Then I traced where it has to come from.
 
-A document longer than `row_capacity` can never be selected by the best-fit search, because that search only considers documents that fit *entirely* in the remaining space. So the only way such a document ever leaves the buffer is the crop path – and the crop path deliberately picks the *shortest* buffered document. An over-long document therefore has to wait until it is the shortest thing in the buffer, which for a genuinely long document is close to never.
+A document longer than `row_capacity` can never be selected by the best-fit search, because that search only considers documents that fit *entirely* in the remaining space. So the only way such a document ever leaves the buffer is the crop path &mdash; and the crop path deliberately picks the *shortest* buffered document. An over-long document therefore has to wait until it is the shortest thing in the buffer, which for a genuinely long document is close to never.
 
 Over-long documents accumulate. The steady-state buffer becomes far more long-tailed than the raw corpus, and the crop rate climbs toward an equilibrium well above anything you would estimate from the document-length distribution alone.
 
-Once you see that, the number stops looking like inefficiency. The 34.6% is not the packer doing a bad job. It is the price of insisting that every row starts at a real document boundary while `T` stays fixed – paid deliberately, so that every training row is dense, fixed-shape, and free of padding tokens the model would otherwise have to learn to ignore.
+Once you see that, the number stops looking like inefficiency. The 34.6% is not the packer doing a bad job. It is the price of insisting that every row starts at a real document boundary while `T` stays fixed &mdash; paid deliberately, so that every training row is dense, fixed-shape, and free of padding tokens the model would otherwise have to learn to ignore.
 
 SFT makes the opposite trade. [`scripts/chat_sft.py`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/scripts/chat_sft.py) uses the same packing, but when no conversation fits it **pads** the row and masks the padding out of the loss. Web text is abundant and interchangeable, so cropping it is cheap; conversations are scarce and structured, and discarding their tails would not be.
 
-> **What I expect to see** – Because every row is filled exactly and nothing is padded, total tokens trained should be exactly `iterations × global batch`, with no remainder. For 5,568 iterations at 1,048,576 tokens that is `5,838,471,168` – and the run should report that number precisely, not approximately.
+> **What I expect to see** &mdash; Because every row is filled exactly and nothing is padded, total tokens trained should be exactly `iterations × global batch`, with no remainder. For 5,568 iterations at 1,048,576 tokens that is `5,838,471,168` &mdash; and the run should report that number precisely, not approximately.
 
-> **Not tested here** – The 34.6% figure is the repository's measurement on real ClimbMix documents. I reproduced the accumulation *trend* in a small simulation, but did not instrument the actual loader. The prefetching around the loader is code structure, not a measured overlap.
+> **Not tested here** &mdash; The 34.6% figure is the repository's measurement on real ClimbMix documents. I reproduced the accumulation *trend* in a small simulation, but did not instrument the actual loader. The prefetching around the loader is code structure, not a measured overlap.
 
 ---
 
@@ -256,7 +256,7 @@ Base pretraining dominates the cost, but it is not the whole pipeline, and the l
 
 `speedrun.sh` downloads a set of synthetic identity conversations, runs [`scripts/chat_sft.py`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/scripts/chat_sft.py), then runs chat evaluation. SFT loads the base checkpoint, inherits most hyperparameters from its metadata rather than making you restate them, and reuses the same optimizer setup. The data mixture is SmolTalk, the identity conversations, MMLU, GSM8K, SimpleSpelling, and SpellingBee.
 
-RL exists – [`scripts/chat_rl.py`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/scripts/chat_rl.py) is a GRPO/REINFORCE-style loop on GSM8K – but it is deliberately simple, with no separate critic or reference-policy copies, and sits outside the speedrun path.
+RL exists &mdash; [`scripts/chat_rl.py`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/scripts/chat_rl.py) is a GRPO/REINFORCE-style loop on GSM8K &mdash; but it is deliberately simple, with no separate critic or reference-policy copies, and sits outside the speedrun path.
 
 Success for the speedrun is measured as CORE for the base model and ChatCORE after SFT. The target is GPT-2-grade capability: a modest bar by 2026 standards, and a reasonable one for a run meant to cost less than a nice dinner.
 
@@ -273,8 +273,8 @@ Reading code and predicting behaviour are different activities, and only the sec
 | 3 | FP8 converts exactly `145` of `158` linear layers, skipping `13` | A different count, or different layers |
 | 4 | Total tokens trained is exactly `5,568 × 1,048,576 = 5,838,471,168` | Any remainder, which would mean padding somewhere |
 | 5 | FA3 activates on H100 and says so | The run falls back to SDPA |
-| 6 | Base training is GPU-bound, so half the GPUs should take roughly twice as long as the 8×H100 reference of 1.65 h | Materially better or worse than about 2x |
-| 7 | Utilization is high and *stable* – not a good average hiding a bad distribution | MFU that sags, spikes, or decays across the run |
+| 6 | Base training is GPU-bound, so half the GPUs should take roughly twice as long as the 8&times;H100 reference of 1.65 h | Materially better or worse than about 2&times; |
+| 7 | Utilization is high and *stable* &mdash; not a good average hiding a bad distribution | MFU that sags, spikes, or decays across the run |
 | 8 | The whole thing lands well under the old $100 GPT-2 line | It does not |
 
 The first five are checkable from the run log alone. The last three need the run to finish.
@@ -287,7 +287,7 @@ A list of confirmed predictions is only worth something if the scope is honest.
 
 I am **not** validating the scaling-law choices. I reproduced the derivation and can confirm the code implements what it claims, but whether `D^0.383` is the right exponent, or 12 the right token-to-parameter ratio, would need sweeps I have not run.
 
-I am **not** attributing performance to individual components. If the run hits high utilization, that is the whole stack – model, attention, precision, optimizer, loader, compiler, hardware. Isolating any one needs ablations, and I have none.
+I am **not** attributing performance to individual components. If the run hits high utilization, that is the whole stack &mdash; model, attention, precision, optimizer, loader, compiler, hardware. Isolating any one needs ablations, and I have none.
 
 I am **not** measuring kernel-level behaviour: no profiler traces, so no claims about communication actually overlapping computation. And I am not evaluating tokenizer quality, KV-cache internals, or CORE methodology. Real topics, not this post.
 
@@ -295,7 +295,7 @@ Part 2 rents the GPUs and works down the list.
 
 ---
 
-## Appendix A – Model configuration
+## Appendix A &mdash; Model configuration
 {: #appendix-a}
 
 | Model piece | Parameter / default | What it affects |
@@ -310,7 +310,7 @@ Part 2 rents the GPUs and works down the list.
 
 Source: [`GPTConfig`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/nanochat/gpt.py#L28-L40) and [`build_model_meta`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/scripts/base_train.py#L130-L144).
 
-## Appendix B – The `--depth` derivation
+## Appendix B &mdash; The `--depth` derivation
 {: #appendix-b}
 
 Inputs and reference constants:
@@ -350,4 +350,4 @@ Reference-model extrapolation follows [muP](https://arxiv.org/abs/2203.03466)-st
 - Yang et al., [Tensor Programs V: Tuning Large Neural Networks via Zero-Shot Hyperparameter Transfer](https://arxiv.org/abs/2203.03466) (muP).
 - [Power Lines: Scaling Laws for Optimal Batch Size](https://arxiv.org/abs/2505.13738).
 - [The T_epoch framework](https://arxiv.org/abs/2405.13698).
-- Horace He, [Making Deep Learning Go Brrrr From First Principles](https://horace.io/brrr_intro.html) — the source of this post's title phrasing.
+- Horace He, [Making Deep Learning Go Brrrr From First Principles](https://horace.io/brrr_intro.html) &mdash; the source of this post's title phrasing.
