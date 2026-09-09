@@ -36,7 +36,7 @@ MODULES = [
 
 
 def build():
-    W = 1000
+    W = 830
     PAD_L, PAD_R = 40, 40
     LEFT_W = 330
     x_mod = PAD_L + LEFT_W + 130
@@ -61,7 +61,7 @@ def build():
     for i, (name, desc) in enumerate(MODULES):
         y = y0 + i * ROW_H
         mod_y[name] = y
-        f.rect(x_mod - 14, y - 14, 8, 22, BLUE, r=2)
+        f.rect(x_mod - 14, y - 14, 8, 22, BLUE, r=4)
         f.text(x_mod, y, name, 14, TEXT, mono=True)
         f.text(x_mod, y + 17, desc, 12, MUTED)
 
@@ -72,7 +72,7 @@ def build():
         colour = GOLD if hot else BLUE
         # bar length shows the wall clock actually goes
         w = 150 * (mins / busiest) if mins else 6
-        f.rect(PAD_L, y - 13, w, 20, colour, r=2, opacity=1.0 if hot else 0.55)
+        f.rect(PAD_L, y - 13, w, 20, colour, r=4, opacity=1.0 if hot else 0.55)
         f.text(PAD_L + max(w, 6) + 12, y + 3, name, 14,
                TEXT if hot else MUTED, mono=True,
                weight="600" if hot else None)

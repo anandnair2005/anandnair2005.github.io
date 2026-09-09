@@ -35,7 +35,7 @@ def counts():
 def build():
     converted, skipped, total, ve_gates = counts()
 
-    W = 1000
+    W = 800
     PAD_L, PAD_T = 40, 40
     H = 430
 
@@ -78,9 +78,7 @@ def build():
                f' &#8212; far below the minimum dimension</text>')
 
     f.text(PAD_L, y2 + 58, "the run logged: " + LOGGED, 13, BROWN, mono=True)
-    f.h = int(y2 + 58 + 24)
-    f.o[1] = f'<rect width="{W}" height="{f.h}" fill="#333333"/>'
-    f.o[0] = f.o[0].replace(f"0 0 {W} {H}", f"0 0 {W} {f.h}")
+    f.resize(h=int(y2 + 58 + 24))
     return f
 
 

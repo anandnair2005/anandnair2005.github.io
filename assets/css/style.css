@@ -18,6 +18,7 @@
 
   --wide: 1200px;   /* figure / table breakout width */
   --read: 680px;    /* reading measure, matches Medium */
+  --figmax: 1000px; /* figures never exceed this, even if drawn wider */
 }
 
 * { box-sizing: border-box; }
@@ -148,9 +149,27 @@ a.pill:hover { background: var(--line); color: var(--ink); }
   max-width: none;
   margin-top: 40px; margin-bottom: 40px;
 }
-.post-body figure img { display: block; width: 100%; height: auto; }
+/* Figures carry their own width and height, so they have an intrinsic size.
+   width:auto lets each one render at the size it was drawn rather than being
+   stretched to the full breakout column; max-width caps the largest and keeps
+   every figure inside the viewport on small screens. */
+.post-body figure img {
+  display: block;
+  width: auto;
+  max-width: min(100%, var(--figmax));
+  height: auto;
+  margin: 0 auto;
+}
+
+/* border-radius on a replaced element clips its content, so the dark SVG
+   canvas is rounded by the CSS alone. Doing it here rather than with rx on
+   the background rect keeps the corner a constant 10px at every render
+   scale, instead of shrinking with the figure on small screens. */
 .post-body figure img,
-.post-body p > img { border: 1px solid var(--line-2); }
+.post-body p > img {
+  border: 1px solid var(--line-2);
+  border-radius: 10px;
+}
 .post-body figcaption {
   max-width: var(--read); margin: 12px auto 0;
   font-family: var(--sans); font-size: 14px; color: var(--ink-2); text-align: center;

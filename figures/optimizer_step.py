@@ -68,7 +68,7 @@ def build():
         x = PAD_L
         for name, frac, colour, sub in phases:
             w = track * frac
-            f.rect(x + 1, y, w - 2, LANE_H, colour, r=3)
+            f.rect(x + 1, y, w - 2, LANE_H, colour, r=4)
             x += w
 
     y_end = y0 + WORLD * (LANE_H + LANE_GAP)

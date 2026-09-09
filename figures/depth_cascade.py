@@ -58,12 +58,15 @@ ROWS = [
 def build():
     d24()    # assert before drawing
 
-    W = 1000
     PAD_L = 40
     LABEL_W = 230
     COL_W = 250
     x_ref = PAD_L + LABEL_W
     x_run = x_ref + COL_W
+    # Canvas fits the content: the value columns are centred, so the table
+    # ends half a column past the last one. Deriving W keeps the figure tight
+    # if the column widths ever change.
+    W = x_run + COL_W // 2 + PAD_L
     ROW_H = 42
     y0 = 92
     H = y0 + len(ROWS) * ROW_H + 56

@@ -41,17 +41,46 @@ def esc(s):
 
 
 class Fig:
-    """Minimal SVG builder. Coordinates are user units; 1000 wide is typical."""
+    """Minimal SVG builder.
+
+    Coordinates are user units. The canvas should fit its content: width and
+    height are emitted as attributes so the SVG has an intrinsic size, which
+    lets the page render it at its natural size instead of stretching every
+    figure to the full column width.
+    """
 
     def __init__(self, w, h, label):
-        self.w, self.h = w, h
-        self.o = [
-            f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" '
-            f'font-family="{SANS}" role="img" aria-label="{esc(label)}">',
-            f'<rect width="{w}" height="{h}" fill="{BG}"/>',
-        ]
+        self.w, self.h, self.label = w, h, label
+        self.o = [self._head(), self._bg()]
 
-    def rect(self, x, y, w, h, fill, r=2, opacity=None, stroke=None, sw=2):
+    def _head(self):
+        return (f'<svg xmlns="http://www.w3.org/2000/svg" '
+                f'width="{self.w}" height="{self.h}" '
+                f'viewBox="0 0 {self.w} {self.h}" '
+                f'font-family="{SANS}" role="img" aria-label="{esc(self.label)}">')
+
+    def _bg(self):
+        return f'<rect width="{self.w}" height="{self.h}" fill="{BG}"/>'
+
+    def resize(self, w=None, h=None):
+        """Resize the canvas after drawing, keeping root attrs and background
+        in sync. Used where the final height is only known once content is
+        laid out."""
+        if w is not None:
+            self.w = w
+        if h is not None:
+            self.h = h
+        self.o[0] = self._head()
+        self.o[1] = self._bg()
+
+    def rect(self, x, y, w, h, fill, r=4, opacity=None, stroke=None, sw=2):
+        """Filled rounded rectangle.
+
+        The default radius is deliberately visible at 1:1: figures render at
+        their natural size, so a 2px corner reads as square. SVG clamps rx to
+        half the width, so narrow bars simply come out stadium-ended rather
+        than distorted. Pass r=0 where a hard corner is meaningful.
+        """
         a = f' opacity="{opacity}"' if opacity is not None else ""
         s = f' stroke="{stroke}" stroke-width="{sw}"' if stroke else ""
         self.o.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{w:.1f}" '

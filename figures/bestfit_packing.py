@@ -28,9 +28,9 @@ assert (CROP_TAKE, CROP_WASTE) == (270, 263)
 
 
 def build():
-    W = 1000
+    W = 900
     PAD_L, PAD_R = 40, 40
-    WASTE_LANE = 230        # reserved so the discarded tail has room to sit
+    WASTE_LANE = 120        # reserved so the discarded tail has room to sit
     track = W - PAD_L - PAD_R - WASTE_LANE
     ROW_H, STEP_GAP = 44, 30
     y0 = 96
@@ -61,7 +61,10 @@ def build():
 
     for si, (kind, docs, take, caption) in enumerate(steps):
         y = y0 + si * (ROW_H + STEP_GAP)
-        # empty capacity behind everything
+        # empty capacity behind everything. Documents in a row sit flush
+        # against each other, so these keep a tighter radius than the library
+        # default: a larger one opens gaps between adjacent blocks and works
+        # against the point of the figure, which is that the row is exactly full.
         f.rect(PAD_L, y, track, ROW_H, "#3d3d3d", r=3)
 
         x = PAD_L
