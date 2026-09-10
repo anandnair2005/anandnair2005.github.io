@@ -18,7 +18,8 @@
 
   --wide: 1200px;   /* figure / table breakout width */
   --read: 680px;    /* reading measure, matches Medium */
-  --figmax: 1000px; /* figures never exceed this, even if drawn wider */
+  --figmax: 680px;    /* figures never exceed the reading column */
+  --wide-table: 900px; /* opt-in breakout for sentence-heavy tables */
 }
 
 * { box-sizing: border-box; }
@@ -147,7 +148,7 @@ a.pill:hover { background: var(--line); color: var(--ink); }
   transform: translateX(-50%);
   width: min(var(--wide), calc(100vw - 48px));
   max-width: none;
-  margin-top: 40px; margin-bottom: 40px;
+  margin-top: 28px; margin-bottom: 28px;
 }
 /* Figures carry their own width and height, so they have an intrinsic size.
    width:auto lets each one render at the size it was drawn rather than being
@@ -171,17 +172,34 @@ a.pill:hover { background: var(--line); color: var(--ink); }
   border-radius: 10px;
 }
 .post-body figcaption {
-  max-width: var(--read); margin: 12px auto 0;
-  font-family: var(--sans); font-size: 14px; color: var(--ink-2); text-align: center;
+  max-width: var(--read); margin: 10px auto 0;
+  font-family: var(--sans); font-size: 13px; color: var(--ink-2); text-align: center;
 }
 
+/* Tables share the reading column with the body text and the figures. An
+   earlier version broke them out to the full 1200px figure width, which put
+   their left edge 260px outside the text and, because display:block
+   left-aligns a narrow table inside a wide block, left them visibly
+   unaligned with everything around them. overflow-x is kept as a fallback
+   for a table that genuinely cannot compress. */
 .post-body table {
   display: block; overflow-x: auto;
-  margin-left: 50%; transform: translateX(-50%);
-  width: min(var(--wide), calc(100vw - 48px));
+  width: 100%;
   margin-top: 32px; margin-bottom: 32px;
   border-collapse: collapse;
   font-family: var(--sans); font-size: 15px;
+}
+
+/* Opt-in for tables whose cells hold sentences rather than short values, so
+   the reading column squeezes them too hard. display:table (not block) is
+   what makes the table actually fill the extra width instead of shrinking to
+   its content and left-aligning inside it. The breakout stays centred on the
+   reading column, so it grows symmetrically. */
+.post-body table.wide {
+  display: table;
+  width: min(var(--wide-table), calc(100vw - 48px));
+  margin-left: 50%;
+  transform: translateX(-50%);
 }
 .post-body th, .post-body td {
   border: 1px solid var(--line); padding: 10px 14px;

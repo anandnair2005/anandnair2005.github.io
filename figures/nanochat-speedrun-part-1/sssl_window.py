@@ -32,10 +32,10 @@ def build():
     n_short = sum(1 for s in sizes if s == short_w)
 
     W = 560
-    PAD_L, PAD_R, PAD_T = 66, PAD, 38
-    BAR_H, GAP = 9, 4
+    PAD_L, PAD_R, PAD_T = 66, PAD, 32
+    BAR_H, GAP = 8, 3
     track = W - PAD_L - PAD_R
-    H = PAD_T + n * (BAR_H + GAP) + 46
+    H = PAD_T + n * (BAR_H + GAP) + 40
 
     f = Fig(W, H, f"Attention window per layer. {n_short} of {n} layers "
             f"attend to only {short_w} tokens.")
@@ -59,8 +59,8 @@ def build():
     for value in (short_w, long_w):
         x = PAD_L + track * value / long_w
         f.line(x, PAD_T - 6, x, base_y, BROWN, 1, dash="3 4")
-        f.text(x, base_y + 14, f"{value:,}", FS_META, MUTED, anchor="middle", mono=True)
-        f.text(PAD_L, base_y + 32, "attention window, in tokens", FS_META, MUTED)
+        f.text(x, base_y + 13, f"{value:,}", FS_META, MUTED, anchor="middle", mono=True)
+    f.text(PAD_L, base_y + 29, "attention window, in tokens", FS_META, MUTED)
 
     return f, sizes, short_w, long_w, n_short
 

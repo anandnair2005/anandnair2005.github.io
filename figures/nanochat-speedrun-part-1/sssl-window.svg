@@ -1,36 +1,35 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="560" height="396" viewBox="0 0 560 396" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" role="img" aria-label="Attention window per layer. 18 of 24 layers attend to only 512 tokens.">
-<rect width="560" height="396" fill="#333333"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="336" viewBox="0 0 560 336" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" role="img" aria-label="Attention window per layer. 18 of 24 layers attend to only 512 tokens.">
+<rect width="560" height="336" fill="#333333"/>
 <text x="66" y="22" font-size="15" fill="#DDDDDD"><tspan fill="#58C4DD" font-weight="600">18 of 24</tspan> layers attend to only <tspan font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">512</tspan> tokens</text>
-<rect x="66.0" y="38.0" width="116.5" height="9.0" rx="3" fill="#58C4DD"/>
-<rect x="66.0" y="51.0" width="116.5" height="9.0" rx="3" fill="#58C4DD"/>
-<rect x="66.0" y="64.0" width="116.5" height="9.0" rx="3" fill="#58C4DD"/>
-<rect x="66.0" y="77.0" width="466.0" height="9.0" rx="3" fill="#F0AC5F"/>
-<rect x="66.0" y="90.0" width="116.5" height="9.0" rx="3" fill="#58C4DD"/>
-<rect x="66.0" y="103.0" width="116.5" height="9.0" rx="3" fill="#58C4DD"/>
-<rect x="66.0" y="116.0" width="116.5" height="9.0" rx="3" fill="#58C4DD"/>
-<rect x="66.0" y="129.0" width="466.0" height="9.0" rx="3" fill="#F0AC5F"/>
-<rect x="66.0" y="142.0" width="116.5" height="9.0" rx="3" fill="#58C4DD"/>
-<rect x="66.0" y="155.0" width="116.5" height="9.0" rx="3" fill="#58C4DD"/>
-<rect x="66.0" y="168.0" width="116.5" height="9.0" rx="3" fill="#58C4DD"/>
-<rect x="66.0" y="181.0" width="466.0" height="9.0" rx="3" fill="#F0AC5F"/>
-<rect x="66.0" y="194.0" width="116.5" height="9.0" rx="3" fill="#58C4DD"/>
-<rect x="66.0" y="207.0" width="116.5" height="9.0" rx="3" fill="#58C4DD"/>
-<rect x="66.0" y="220.0" width="116.5" height="9.0" rx="3" fill="#58C4DD"/>
-<rect x="66.0" y="233.0" width="466.0" height="9.0" rx="3" fill="#F0AC5F"/>
-<rect x="66.0" y="246.0" width="116.5" height="9.0" rx="3" fill="#58C4DD"/>
-<rect x="66.0" y="259.0" width="116.5" height="9.0" rx="3" fill="#58C4DD"/>
-<rect x="66.0" y="272.0" width="116.5" height="9.0" rx="3" fill="#58C4DD"/>
-<rect x="66.0" y="285.0" width="466.0" height="9.0" rx="3" fill="#F0AC5F"/>
-<rect x="66.0" y="298.0" width="116.5" height="9.0" rx="3" fill="#58C4DD"/>
-<rect x="66.0" y="311.0" width="116.5" height="9.0" rx="3" fill="#58C4DD"/>
-<rect x="66.0" y="324.0" width="116.5" height="9.0" rx="3" fill="#58C4DD"/>
-<rect x="66.0" y="337.0" width="466.0" height="9.0" rx="3" fill="#F0AC5F"/>
-<text x="56.0" y="46.0" font-size="11" fill="#888888" text-anchor="end">layer 0</text>
-<text x="56.0" y="345.0" font-size="11" fill="#888888" text-anchor="end">layer 23</text>
-<line x1="182.5" y1="32.0" x2="182.5" y2="352.0" stroke="#736357" stroke-width="1" stroke-dasharray="3 4"/>
-<text x="182.5" y="366.0" font-size="11" fill="#888888" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">512</text>
-<text x="66.0" y="384.0" font-size="11" fill="#888888" text-anchor="start">attention window, in tokens</text>
-<line x1="532.0" y1="32.0" x2="532.0" y2="352.0" stroke="#736357" stroke-width="1" stroke-dasharray="3 4"/>
-<text x="532.0" y="366.0" font-size="11" fill="#888888" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">2,048</text>
-<text x="66.0" y="384.0" font-size="11" fill="#888888" text-anchor="start">attention window, in tokens</text>
+<rect x="66.0" y="32.0" width="116.5" height="8.0" rx="3" fill="#58C4DD"/>
+<rect x="66.0" y="43.0" width="116.5" height="8.0" rx="3" fill="#58C4DD"/>
+<rect x="66.0" y="54.0" width="116.5" height="8.0" rx="3" fill="#58C4DD"/>
+<rect x="66.0" y="65.0" width="466.0" height="8.0" rx="3" fill="#F0AC5F"/>
+<rect x="66.0" y="76.0" width="116.5" height="8.0" rx="3" fill="#58C4DD"/>
+<rect x="66.0" y="87.0" width="116.5" height="8.0" rx="3" fill="#58C4DD"/>
+<rect x="66.0" y="98.0" width="116.5" height="8.0" rx="3" fill="#58C4DD"/>
+<rect x="66.0" y="109.0" width="466.0" height="8.0" rx="3" fill="#F0AC5F"/>
+<rect x="66.0" y="120.0" width="116.5" height="8.0" rx="3" fill="#58C4DD"/>
+<rect x="66.0" y="131.0" width="116.5" height="8.0" rx="3" fill="#58C4DD"/>
+<rect x="66.0" y="142.0" width="116.5" height="8.0" rx="3" fill="#58C4DD"/>
+<rect x="66.0" y="153.0" width="466.0" height="8.0" rx="3" fill="#F0AC5F"/>
+<rect x="66.0" y="164.0" width="116.5" height="8.0" rx="3" fill="#58C4DD"/>
+<rect x="66.0" y="175.0" width="116.5" height="8.0" rx="3" fill="#58C4DD"/>
+<rect x="66.0" y="186.0" width="116.5" height="8.0" rx="3" fill="#58C4DD"/>
+<rect x="66.0" y="197.0" width="466.0" height="8.0" rx="3" fill="#F0AC5F"/>
+<rect x="66.0" y="208.0" width="116.5" height="8.0" rx="3" fill="#58C4DD"/>
+<rect x="66.0" y="219.0" width="116.5" height="8.0" rx="3" fill="#58C4DD"/>
+<rect x="66.0" y="230.0" width="116.5" height="8.0" rx="3" fill="#58C4DD"/>
+<rect x="66.0" y="241.0" width="466.0" height="8.0" rx="3" fill="#F0AC5F"/>
+<rect x="66.0" y="252.0" width="116.5" height="8.0" rx="3" fill="#58C4DD"/>
+<rect x="66.0" y="263.0" width="116.5" height="8.0" rx="3" fill="#58C4DD"/>
+<rect x="66.0" y="274.0" width="116.5" height="8.0" rx="3" fill="#58C4DD"/>
+<rect x="66.0" y="285.0" width="466.0" height="8.0" rx="3" fill="#F0AC5F"/>
+<text x="56.0" y="39.0" font-size="11" fill="#888888" text-anchor="end">layer 0</text>
+<text x="56.0" y="292.0" font-size="11" fill="#888888" text-anchor="end">layer 23</text>
+<line x1="182.5" y1="26.0" x2="182.5" y2="298.0" stroke="#736357" stroke-width="1" stroke-dasharray="3 4"/>
+<text x="182.5" y="311.0" font-size="11" fill="#888888" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">512</text>
+<line x1="532.0" y1="26.0" x2="532.0" y2="298.0" stroke="#736357" stroke-width="1" stroke-dasharray="3 4"/>
+<text x="532.0" y="311.0" font-size="11" fill="#888888" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">2,048</text>
+<text x="66.0" y="327.0" font-size="11" fill="#888888" text-anchor="start">attention window, in tokens</text>
 </svg>

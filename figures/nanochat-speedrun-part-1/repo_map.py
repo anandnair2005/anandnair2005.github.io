@@ -44,11 +44,11 @@ def build():
     PAD_L = PAD_R = PAD
     LEFT_W = 246
     x_mod = PAD_L + LEFT_W + 92
-    ROW_H = 37            # two lines of text per module row, so wider than ROW
-    y0 = 74
+    ROW_H = 31            # two lines of text per module row, so wider than ROW
+    y0 = 58
     FOOT_W = 604
     W = max(x_mod + 210 + PAD_R, FOOT_W + PAD_L + PAD_R)
-    H = y0 + max(len(STAGES), len(MODULES)) * ROW_H + 58
+    H = y0 + max(len(STAGES), len(MODULES)) * ROW_H + 46
 
     base_mins = next(s for n, s, _ in STAGES if n == "base_train")
     other_mins = sum(s for n, s, _ in STAGES if s and n != "base_train")
@@ -59,9 +59,9 @@ def build():
     f.o.append(f'<text x="{PAD_L}" y="24" font-size="{FS_TITLE}" fill="{TEXT}">'
                f'<tspan font-family="{MONO}">runs/speedrun.sh</tspan>'
                f' is the whole project\u2019s table of contents</text>')
-    f.text(PAD_L, 50, "pipeline stage", FS_META, MUTED)
-    f.text(x_mod, 50, "library module", FS_META, MUTED)
-    f.line(PAD_L, 58, W - PAD_R, 58, BROWN, 1, opacity=0.4)
+    f.text(PAD_L, 40, "pipeline stage", FS_META, MUTED)
+    f.text(x_mod, 40, "library module", FS_META, MUTED)
+    f.line(PAD_L, 46, W - PAD_R, 46, BROWN, 1, opacity=0.4)
 
     mod_y = {}
     for i, (name, desc) in enumerate(MODULES):
@@ -69,14 +69,14 @@ def build():
         mod_y[name] = y
         f.rect(x_mod - 11, y - 11, 6, 17, BLUE, r=3)
         f.text(x_mod, y, name, FS_BODY, TEXT, mono=True)
-        f.text(x_mod, y + 16, desc, FS_META, MUTED)
+        f.text(x_mod, y + 13, desc, FS_META, MUTED)
 
     busiest = max(s for _, s, _ in STAGES if s)
     for i, (name, mins, uses) in enumerate(STAGES):
         y = y0 + i * ROW_H
         hot = name == "base_train"
         colour = GOLD if hot else BLUE
-        # bar length shows the wall clock actually goes
+        # bar length shows where the wall clock actually goes
         w = 108 * (mins / busiest) if mins else 5
         f.rect(PAD_L, y - 10, w, 15, colour, r=4, opacity=1.0 if hot else 0.55)
         f.text(PAD_L + max(w, 5) + 9, y + 2, name, FS_BODY,
@@ -95,7 +95,7 @@ def build():
     y_end = y0 + max(len(STAGES), len(MODULES)) * ROW_H
     ratio = base_mins / other_mins
     f.line(PAD_L, y_end + 2, W - PAD_R, y_end + 2, BROWN, 1, opacity=0.4)
-    f.o.append(f'<text x="{PAD_L}" y="{y_end + 24}" font-size="{FS_META}" fill="{MUTED}">'
+    f.o.append(f'<text x="{PAD_L}" y="{y_end + 20}" font-size="{FS_META}" fill="{MUTED}">'
                f'<tspan fill="{GOLD}" font-weight="600">base_train</tspan>'
                f' is {ratio:.1f}x every other stage combined, and touches five of '
                f'the six modules. Everything after this is a zoom into it.</text>')
@@ -105,7 +105,7 @@ def build():
 
 if __name__ == "__main__":
     output_to(__file__)
-    path, size = build().save("repo_map.svg")
+    path, size = build().save("repo-map.svg")
     total_other = sum(s for n, s, _ in STAGES if s and n != "base_train")
     base = next(s for n, s, _ in STAGES if n == "base_train")
     print(f"  repo-map.svg         {size/1024:5.1f} KB    "

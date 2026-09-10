@@ -162,7 +162,7 @@
 <rect x="226.0" y="172.0" width="15.0" height="15.0" rx="3" fill="#F0AC5F"/>
 <rect x="244.0" y="172.0" width="15.0" height="15.0" rx="3" fill="#F0AC5F"/>
 <line x1="28.0" y1="203.0" x2="572.0" y2="203.0" stroke="#736357" stroke-width="1" opacity="0.4"/>
-<text x="28" y="219" font-size="11" fill="#888888"><tspan fill="#F0AC5F">12 x ve_gate</tspan><tspan font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">Linear(12, 12)</tspan> &#8212; 12 is not divisible by 16</text>
-<text x="28" y="237" font-size="11" fill="#888888"><tspan fill="#F0AC5F">1 x smear_gate</tspan><tspan font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">Linear(24, 1)</tspan> &#8212; far below the minimum dimension</text>
+<text x="28" y="219" font-size="11" fill="#888888"><tspan fill="#F0AC5F">12 x ve_gate</tspan> <tspan font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">Linear(12, 12)</tspan> &#8212; 12 is not divisible by 16</text>
+<text x="28" y="237" font-size="11" fill="#888888"><tspan fill="#F0AC5F">1 x smear_gate</tspan> <tspan font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">Linear(24, 1)</tspan> &#8212; far below the minimum dimension</text>
 <text x="28.0" y="259.0" font-size="11" fill="#736357" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">the run logged: converted 145/158 linear layers, skipped 13 (too small)</text>
 </svg>

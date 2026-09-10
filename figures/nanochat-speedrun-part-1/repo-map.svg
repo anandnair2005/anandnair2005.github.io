@@ -1,56 +1,56 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="660" height="428" viewBox="0 0 660 428" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" role="img" aria-label="The NanoChat repo: speedrun.sh stages on the left, library modules on the right. Base training dominates.">
-<rect width="660" height="428" fill="#333333"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="660" height="352" viewBox="0 0 660 352" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" role="img" aria-label="The NanoChat repo: speedrun.sh stages on the left, library modules on the right. Base training dominates.">
+<rect width="660" height="352" fill="#333333"/>
 <text x="28" y="24" font-size="15" fill="#DDDDDD"><tspan font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">runs/speedrun.sh</tspan> is the whole project’s table of contents</text>
-<text x="28.0" y="50.0" font-size="11" fill="#888888" text-anchor="start">pipeline stage</text>
-<text x="366.0" y="50.0" font-size="11" fill="#888888" text-anchor="start">library module</text>
-<line x1="28.0" y1="58.0" x2="632.0" y2="58.0" stroke="#736357" stroke-width="1" opacity="0.4"/>
-<rect x="355.0" y="63.0" width="6.0" height="17.0" rx="3" fill="#58C4DD"/>
-<text x="366.0" y="74.0" font-size="13" fill="#DDDDDD" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">gpt.py</text>
-<text x="366.0" y="90.0" font-size="11" fill="#888888" text-anchor="start">model, attention, window pattern</text>
-<rect x="355.0" y="100.0" width="6.0" height="17.0" rx="3" fill="#58C4DD"/>
-<text x="366.0" y="111.0" font-size="13" fill="#DDDDDD" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">optim.py</text>
-<text x="366.0" y="127.0" font-size="11" fill="#888888" text-anchor="start">DistMuonAdamW</text>
-<rect x="355.0" y="137.0" width="6.0" height="17.0" rx="3" fill="#58C4DD"/>
-<text x="366.0" y="148.0" font-size="13" fill="#DDDDDD" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">dataloader.py</text>
-<text x="366.0" y="164.0" font-size="11" fill="#888888" text-anchor="start">BOS-aligned best-fit packing</text>
-<rect x="355.0" y="174.0" width="6.0" height="17.0" rx="3" fill="#58C4DD"/>
-<text x="366.0" y="185.0" font-size="13" fill="#DDDDDD" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">flash_attention.py</text>
-<text x="366.0" y="201.0" font-size="11" fill="#888888" text-anchor="start">FA3 on Hopper, SDPA elsewhere</text>
-<rect x="355.0" y="211.0" width="6.0" height="17.0" rx="3" fill="#58C4DD"/>
-<text x="366.0" y="222.0" font-size="13" fill="#DDDDDD" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">fp8.py</text>
-<text x="366.0" y="238.0" font-size="11" fill="#888888" text-anchor="start">tensorwise scaling</text>
-<rect x="355.0" y="248.0" width="6.0" height="17.0" rx="3" fill="#58C4DD"/>
-<text x="366.0" y="259.0" font-size="13" fill="#DDDDDD" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">engine.py</text>
-<text x="366.0" y="275.0" font-size="11" fill="#888888" text-anchor="start">KV-cache inference</text>
-<rect x="28.0" y="64.0" width="5.0" height="15.0" rx="4" fill="#58C4DD" opacity="0.55"/>
-<text x="42.0" y="76.0" font-size="13" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">dataset download</text>
-<rect x="28.0" y="101.0" width="5.0" height="15.0" rx="4" fill="#58C4DD" opacity="0.55"/>
-<text x="42.0" y="113.0" font-size="13" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">tok_train</text>
-<rect x="28.0" y="138.0" width="5.0" height="15.0" rx="4" fill="#58C4DD" opacity="0.55"/>
-<text x="42.0" y="150.0" font-size="13" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">tok_eval</text>
-<rect x="28.0" y="175.0" width="108.0" height="15.0" rx="4" fill="#F0AC5F" opacity="1.0"/>
-<text x="145.0" y="187.0" font-size="13" fill="#DDDDDD" text-anchor="start" font-weight="600" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">base_train</text>
-<text x="274.0" y="187.0" font-size="11" fill="#F0AC5F" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">196m</text>
-<line x1="284.0" y1="185.0" x2="350.0" y2="74.0" stroke="#F0AC5F" stroke-width="1.2" opacity="0.7"/>
-<line x1="284.0" y1="185.0" x2="350.0" y2="111.0" stroke="#F0AC5F" stroke-width="1.2" opacity="0.7"/>
-<line x1="284.0" y1="185.0" x2="350.0" y2="148.0" stroke="#F0AC5F" stroke-width="1.2" opacity="0.7"/>
-<line x1="284.0" y1="185.0" x2="350.0" y2="185.0" stroke="#F0AC5F" stroke-width="1.2" opacity="0.7"/>
-<line x1="284.0" y1="185.0" x2="350.0" y2="222.0" stroke="#F0AC5F" stroke-width="1.2" opacity="0.7"/>
-<rect x="28.0" y="212.0" width="6.0" height="15.0" rx="4" fill="#58C4DD" opacity="0.55"/>
-<text x="43.0" y="224.0" font-size="13" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">base_eval</text>
-<text x="274.0" y="224.0" font-size="11" fill="#888888" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">11m</text>
-<rect x="28.0" y="249.0" width="14.8" height="15.0" rx="4" fill="#58C4DD" opacity="0.55"/>
-<text x="51.8" y="261.0" font-size="13" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">chat_sft</text>
-<text x="274.0" y="261.0" font-size="11" fill="#888888" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">27m</text>
-<line x1="284.0" y1="259.0" x2="350.0" y2="74.0" stroke="#736357" stroke-width="1.2" opacity="0.3"/>
-<line x1="284.0" y1="259.0" x2="350.0" y2="111.0" stroke="#736357" stroke-width="1.2" opacity="0.3"/>
-<rect x="28.0" y="286.0" width="7.1" height="15.0" rx="4" fill="#58C4DD" opacity="0.55"/>
-<text x="44.1" y="298.0" font-size="13" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">chat_eval</text>
-<text x="274.0" y="298.0" font-size="11" fill="#888888" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">13m</text>
-<line x1="284.0" y1="296.0" x2="350.0" y2="259.0" stroke="#736357" stroke-width="1.2" opacity="0.3"/>
-<rect x="28.0" y="323.0" width="1.5" height="15.0" rx="4" fill="#58C4DD" opacity="0.55"/>
-<text x="42.0" y="335.0" font-size="13" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">report generate</text>
-<text x="274.0" y="335.0" font-size="11" fill="#888888" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">3m</text>
-<line x1="28.0" y1="372.0" x2="632.0" y2="372.0" stroke="#736357" stroke-width="1" opacity="0.4"/>
-<text x="28" y="394" font-size="11" fill="#888888"><tspan fill="#F0AC5F" font-weight="600">base_train</tspan> is 3.7x every other stage combined, and touches five of the six modules. Everything after this is a zoom into it.</text>
+<text x="28.0" y="40.0" font-size="11" fill="#888888" text-anchor="start">pipeline stage</text>
+<text x="366.0" y="40.0" font-size="11" fill="#888888" text-anchor="start">library module</text>
+<line x1="28.0" y1="46.0" x2="632.0" y2="46.0" stroke="#736357" stroke-width="1" opacity="0.4"/>
+<rect x="355.0" y="47.0" width="6.0" height="17.0" rx="3" fill="#58C4DD"/>
+<text x="366.0" y="58.0" font-size="13" fill="#DDDDDD" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">gpt.py</text>
+<text x="366.0" y="71.0" font-size="11" fill="#888888" text-anchor="start">model, attention, window pattern</text>
+<rect x="355.0" y="78.0" width="6.0" height="17.0" rx="3" fill="#58C4DD"/>
+<text x="366.0" y="89.0" font-size="13" fill="#DDDDDD" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">optim.py</text>
+<text x="366.0" y="102.0" font-size="11" fill="#888888" text-anchor="start">DistMuonAdamW</text>
+<rect x="355.0" y="109.0" width="6.0" height="17.0" rx="3" fill="#58C4DD"/>
+<text x="366.0" y="120.0" font-size="13" fill="#DDDDDD" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">dataloader.py</text>
+<text x="366.0" y="133.0" font-size="11" fill="#888888" text-anchor="start">BOS-aligned best-fit packing</text>
+<rect x="355.0" y="140.0" width="6.0" height="17.0" rx="3" fill="#58C4DD"/>
+<text x="366.0" y="151.0" font-size="13" fill="#DDDDDD" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">flash_attention.py</text>
+<text x="366.0" y="164.0" font-size="11" fill="#888888" text-anchor="start">FA3 on Hopper, SDPA elsewhere</text>
+<rect x="355.0" y="171.0" width="6.0" height="17.0" rx="3" fill="#58C4DD"/>
+<text x="366.0" y="182.0" font-size="13" fill="#DDDDDD" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">fp8.py</text>
+<text x="366.0" y="195.0" font-size="11" fill="#888888" text-anchor="start">tensorwise scaling</text>
+<rect x="355.0" y="202.0" width="6.0" height="17.0" rx="3" fill="#58C4DD"/>
+<text x="366.0" y="213.0" font-size="13" fill="#DDDDDD" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">engine.py</text>
+<text x="366.0" y="226.0" font-size="11" fill="#888888" text-anchor="start">KV-cache inference</text>
+<rect x="28.0" y="48.0" width="5.0" height="15.0" rx="4" fill="#58C4DD" opacity="0.55"/>
+<text x="42.0" y="60.0" font-size="13" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">dataset download</text>
+<rect x="28.0" y="79.0" width="5.0" height="15.0" rx="4" fill="#58C4DD" opacity="0.55"/>
+<text x="42.0" y="91.0" font-size="13" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">tok_train</text>
+<rect x="28.0" y="110.0" width="5.0" height="15.0" rx="4" fill="#58C4DD" opacity="0.55"/>
+<text x="42.0" y="122.0" font-size="13" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">tok_eval</text>
+<rect x="28.0" y="141.0" width="108.0" height="15.0" rx="4" fill="#F0AC5F" opacity="1.0"/>
+<text x="145.0" y="153.0" font-size="13" fill="#DDDDDD" text-anchor="start" font-weight="600" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">base_train</text>
+<text x="274.0" y="153.0" font-size="11" fill="#F0AC5F" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">196m</text>
+<line x1="284.0" y1="151.0" x2="350.0" y2="58.0" stroke="#F0AC5F" stroke-width="1.2" opacity="0.7"/>
+<line x1="284.0" y1="151.0" x2="350.0" y2="89.0" stroke="#F0AC5F" stroke-width="1.2" opacity="0.7"/>
+<line x1="284.0" y1="151.0" x2="350.0" y2="120.0" stroke="#F0AC5F" stroke-width="1.2" opacity="0.7"/>
+<line x1="284.0" y1="151.0" x2="350.0" y2="151.0" stroke="#F0AC5F" stroke-width="1.2" opacity="0.7"/>
+<line x1="284.0" y1="151.0" x2="350.0" y2="182.0" stroke="#F0AC5F" stroke-width="1.2" opacity="0.7"/>
+<rect x="28.0" y="172.0" width="6.0" height="15.0" rx="4" fill="#58C4DD" opacity="0.55"/>
+<text x="43.0" y="184.0" font-size="13" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">base_eval</text>
+<text x="274.0" y="184.0" font-size="11" fill="#888888" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">11m</text>
+<rect x="28.0" y="203.0" width="14.8" height="15.0" rx="4" fill="#58C4DD" opacity="0.55"/>
+<text x="51.8" y="215.0" font-size="13" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">chat_sft</text>
+<text x="274.0" y="215.0" font-size="11" fill="#888888" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">27m</text>
+<line x1="284.0" y1="213.0" x2="350.0" y2="58.0" stroke="#736357" stroke-width="1.2" opacity="0.3"/>
+<line x1="284.0" y1="213.0" x2="350.0" y2="89.0" stroke="#736357" stroke-width="1.2" opacity="0.3"/>
+<rect x="28.0" y="234.0" width="7.1" height="15.0" rx="4" fill="#58C4DD" opacity="0.55"/>
+<text x="44.1" y="246.0" font-size="13" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">chat_eval</text>
+<text x="274.0" y="246.0" font-size="11" fill="#888888" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">13m</text>
+<line x1="284.0" y1="244.0" x2="350.0" y2="213.0" stroke="#736357" stroke-width="1.2" opacity="0.3"/>
+<rect x="28.0" y="265.0" width="1.5" height="15.0" rx="4" fill="#58C4DD" opacity="0.55"/>
+<text x="42.0" y="277.0" font-size="13" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">report generate</text>
+<text x="274.0" y="277.0" font-size="11" fill="#888888" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">3m</text>
+<line x1="28.0" y1="308.0" x2="632.0" y2="308.0" stroke="#736357" stroke-width="1" opacity="0.4"/>
+<text x="28" y="326" font-size="11" fill="#888888"><tspan fill="#F0AC5F" font-weight="600">base_train</tspan> is 3.7x every other stage combined, and touches five of the six modules. Everything after this is a zoom into it.</text>
 </svg>

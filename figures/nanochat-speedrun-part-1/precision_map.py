@@ -74,11 +74,11 @@ def build():
     f.line(PAD_L, y2 - 14, W - PAD_L, y2 - 14, BROWN, 1, opacity=0.4)
 
     f.o.append(f'<text x="{PAD_L}" y="{y2 + 2}" font-size="{FS_META}" fill="{MUTED}">'
-               f'<tspan fill="{GOLD}">{ve_gates} x ve_gate</tspan>'
+               f'<tspan fill="{GOLD}">{ve_gates} x ve_gate</tspan> '
                f'<tspan font-family="{MONO}">Linear(12, 12)</tspan>'
                f' &#8212; 12 is not divisible by 16</text>')
     f.o.append(f'<text x="{PAD_L}" y="{y2 + 20}" font-size="{FS_META}" fill="{MUTED}">'
-               f'<tspan fill="{GOLD}">1 x smear_gate</tspan>'
+               f'<tspan fill="{GOLD}">1 x smear_gate</tspan> '
                f'<tspan font-family="{MONO}">Linear(24, 1)</tspan>'
                f' &#8212; far below the minimum dimension</text>')
 

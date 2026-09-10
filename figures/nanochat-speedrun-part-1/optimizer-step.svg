@@ -27,7 +27,7 @@
 <rect x="426.0" y="166.0" width="97.0" height="22.0" rx="4" fill="#F0AC5F"/>
 <rect x="525.0" y="166.0" width="86.0" height="22.0" rx="4" fill="#9A72AC"/>
 <line x1="348.0" y1="72.0" x2="348.0" y2="198.0" stroke="#DDDDDD" stroke-width="2" stroke-dasharray="4 4"/>
-<text x="358.0" y="214.0" font-size="11" fill="#DDDDDD" text-anchor="start">an ordinary DDP model would already be all-reducing at the dashed line</text>
+<text x="28.0" y="214.0" font-size="11" fill="#DDDDDD" text-anchor="start">an ordinary DDP model would already be all-reducing at the dashed line</text>
 <line x1="28.0" y1="230.0" x2="612.0" y2="230.0" stroke="#736357" stroke-width="1" opacity="0.4"/>
 <text x="28" y="250" font-size="11" fill="#888888"><tspan fill="#9A72AC">communication</tspan> is an explicit async phase; <tspan fill="#F0AC5F">each rank updates only its own shard</tspan>, so optimizer state is never duplicated</text>
 </svg>

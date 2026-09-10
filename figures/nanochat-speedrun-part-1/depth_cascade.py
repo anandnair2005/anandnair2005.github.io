@@ -74,7 +74,7 @@ def build():
     W = x_run + COL_W // 2 + PAD_L
     ROW_H = ROW
     y0 = 62
-    FOOT = ["d12 is the measured anchor, so its scales are exactly 1.0,",
+    FOOT = ["d12 is the measured anchor, so its scales are exactly 1.0;",
             "every other depth extrapolates from it."]
     H = y0 + len(ROWS) * ROW_H + 20 + len(FOOT) * 16
 

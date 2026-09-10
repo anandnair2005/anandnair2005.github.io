@@ -81,7 +81,7 @@ def build():
     # the boundary that matters
     x_sync = PAD_L + track * phases[0][1]
     f.line(x_sync, y0 - 10, x_sync, y_end + 4, TEXT, 2, dash="4 4")
-    f.text(x_sync + 10, y_end + 20,
+    f.text(PAD, y_end + 20,
            "an ordinary DDP model would already be all-reducing at the dashed line",
            FS_META, TEXT)
 

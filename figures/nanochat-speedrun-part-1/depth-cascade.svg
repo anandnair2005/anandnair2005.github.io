@@ -48,6 +48,6 @@
 <text x="47.0" y="274.0" font-size="13" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">training tokens</text>
 <text x="196.0" y="274.0" font-size="13" fill="#888888" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">—</text>
 <text x="328.0" y="274.0" font-size="13" fill="#58C4DD" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">5,838,471,168</text>
-<text x="28.0" y="308.0" font-size="11" fill="#736357" text-anchor="start">d12 is the measured anchor, so its scales are exactly 1.0,</text>
+<text x="28.0" y="308.0" font-size="11" fill="#736357" text-anchor="start">d12 is the measured anchor, so its scales are exactly 1.0;</text>
 <text x="28.0" y="324.0" font-size="11" fill="#736357" text-anchor="start">every other depth extrapolates from it.</text>
 </svg>

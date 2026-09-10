@@ -36,7 +36,14 @@ exclude:
   - Gemfile.lock
   - vendor
   - preview-*.html
+  # Figure infrastructure and tooling live beside the figures but are not part
+  # of the site. The per-post generators are deliberately NOT excluded: they
+  # assert their numbers against the run log, and being able to read them is
+  # what makes the figures auditable.
   - figures/figlib.py
   - figures/figtools.py
-  - figures/*/build_all.py
-  - figures/*/export_png.py
+  - "figures/*/build_all.py"
+  - "figures/*/export_png.py"
+  - "figures/*/export-png.html"
+  - "figures/*/png-export-prompt.md"
+  - "**/__pycache__"
