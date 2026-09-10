@@ -14,7 +14,12 @@ asserted against the lines the real d24 run printed:
 """
 
 import math
-from figlib import Fig, BLUE, GOLD, BROWN, MUTED, TEXT, MONO
+import os
+import sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from figlib import (Fig, BLUE, GOLD, BROWN, MUTED, TEXT, MONO,
+                    FS_TITLE, FS_BODY, FS_META, PAD, ROW, output_to)
 
 ASPECT_RATIO = 64
 HEAD_DIM = 128
@@ -58,51 +63,53 @@ ROWS = [
 def build():
     d24()    # assert before drawing
 
-    PAD_L = 40
-    LABEL_W = 230
-    COL_W = 250
+    PAD_L = PAD
+    LABEL_W = 168
+    COL_W = 132
     x_ref = PAD_L + LABEL_W
     x_run = x_ref + COL_W
     # Canvas fits the content: the value columns are centred, so the table
     # ends half a column past the last one. Deriving W keeps the figure tight
     # if the column widths ever change.
     W = x_run + COL_W // 2 + PAD_L
-    ROW_H = 42
-    y0 = 92
-    H = y0 + len(ROWS) * ROW_H + 56
+    ROW_H = ROW
+    y0 = 62
+    FOOT = ["d12 is the measured anchor, so its scales are exactly 1.0,",
+            "every other depth extrapolates from it."]
+    H = y0 + len(ROWS) * ROW_H + 20 + len(FOOT) * 16
 
     f = Fig(W, H, "The --depth cascade: one integer determines width, heads, "
             "batch size, learning-rate scaling and training horizon.")
 
-    f.o.append(f'<text x="{PAD_L}" y="30" font-size="17" fill="{TEXT}">'
+    f.o.append(f'<text x="{PAD_L}" y="24" font-size="{FS_TITLE}" fill="{TEXT}">'
                f'One integer fixes '
                f'<tspan fill="{GOLD}" font-weight="600">everything below it</tspan>'
                f'</text>')
-    f.text(x_ref, 66, "d12  reference", 13, MUTED, anchor="middle")
-    f.text(x_run, 66, "d24  the run", 13, GOLD, anchor="middle")
-    f.line(PAD_L, 76, W - PAD_L, 76, BROWN, 1, opacity=0.4)
+    f.text(x_ref, 46, "d12  reference", FS_META, MUTED, anchor="middle")
+    f.text(x_run, 46, "d24  the run", FS_META, GOLD, anchor="middle")
+    f.line(PAD_L, 54, W - PAD_L, 54, BROWN, 1, opacity=0.4)
 
     for i, (name, ref, run, is_input) in enumerate(ROWS):
         y = y0 + i * ROW_H
         colour = GOLD if is_input else BLUE
         # the spine: one continuous line showing the value flowing down
         if i < len(ROWS) - 1:
-            f.line(PAD_L + 8, y + 6, PAD_L + 8, y + ROW_H + 6, BROWN, 2, opacity=0.5)
-        f.rect(PAD_L + 3, y - 4, 11, 11, colour, r=6)
-        f.text(PAD_L + 26, y + 6, name, 15, TEXT if is_input else MUTED,
+            f.line(PAD_L + 5, y + 4, PAD_L + 5, y + ROW_H + 4, BROWN, 2, opacity=0.5)
+        f.rect(PAD_L + 1, y - 4, 9, 9, colour, r=5)
+        f.text(PAD_L + 19, y + 4, name, FS_BODY, TEXT if is_input else MUTED,
                weight="600" if is_input else None, mono=True)
-        f.text(x_ref, y + 6, ref, 15, MUTED, anchor="middle", mono=True)
-        f.text(x_run, y + 6, run, 15, colour, anchor="middle", mono=True,
+        f.text(x_ref, y + 4, ref, FS_BODY, MUTED, anchor="middle", mono=True)
+        f.text(x_run, y + 4, run, FS_BODY, colour, anchor="middle", mono=True,
                weight="600" if is_input else None)
 
     y_end = y0 + len(ROWS) * ROW_H
-    f.text(PAD_L, y_end + 18, "d12 is the measured anchor, so its scales are "
-                              "exactly 1.0; every other depth extrapolates from it.",
-           13, BROWN)
+    for i, line in enumerate(FOOT):
+        f.text(PAD_L, y_end + 12 + i * 16, line, FS_META, BROWN)
     return f
 
 
 if __name__ == "__main__":
+    output_to(__file__)
     path, size = build().save("depth-cascade.svg")
     md, h, b, it, tok, lr, aw = d24()
     print(f"  depth-cascade.svg    {size/1024:5.1f} KB    "

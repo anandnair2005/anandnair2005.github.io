@@ -3,7 +3,7 @@
 The site serves the SVGs in this folder directly. Medium cannot: it accepts
 only JPG/JPEG/GIF/PNG, and wants images at least **1192px wide** before it
 offers all placement options. The figures are authored at 1000px, so the
-syndication copies in `figures/png/` are rendered at **2x (2000px)**.
+syndication copies in `png/` are rendered at **2x (2000px)**.
 
 There are two ways to regenerate them.
 
@@ -16,10 +16,10 @@ corporate group-policy restrictions on running downloaded browser binaries.
 ## Option B - run the script
 
 ```bash
-python figures/build_all.py      # no dependencies, pure stdlib
+python build_all.py      # no dependencies, pure stdlib
 pip install playwright
 playwright install chromium      # skip if Edge or Chrome is installed
-python figures/export_png.py
+python export_png.py
 ```
 
 `export_png.py` prefers a system browser (Edge, then Chrome) and only falls
@@ -38,46 +38,56 @@ Copy everything in the block below.
 ## Context
 Repo: my GitHub Pages site (`anandnair2005.github.io`), branch `feature/pages-init`.
 
-`figures/` contains six SVG figures for a blog post, plus the Python
+This folder (`figures/<post-slug>/`) holds one post's SVG figures plus the Python
 generators that build them. The site serves SVG. I also syndicate the post to
 Medium, which **does not accept SVG** - only JPG/JPEG/GIF/PNG - and which
 wants images **at least 1192px wide** before it offers all image placement
 options. The figures are authored at 1000px wide.
 
-So: render each SVG at **2x scale (2000px wide)** and save as PNG into
-`figures/png/`, overwriting what's there.
+So: render each SVG at **2x scale** and save as PNG into
+`png/`, overwriting what's there.
 
 The six figures are:
 repo-map, depth-cascade, sssl-window, precision-map, optimizer-step, bestfit-packing
 
 ## Do this
-1. Run `python figures/build_all.py` first so the SVGs are current. It needs
+1. Run `python build_all.py` first so the SVGs are current. It needs
    **no dependencies** - pure Python 3 stdlib, no venv, no pip install.
-2. Make sure `figures/png/` exists (create it from the shell, not the browser).
+2. Make sure `png/` exists (create it from the shell, not the browser).
 3. Use the **integrated browser / Playwright-style tools** (e.g.
    `openBrowserPage` then `runPlaywrightCode`) to render and screenshot each
    figure at 2x.
-4. `figures/export-png.html` already exists in the repo for exactly this. Open
+4. `export-png.html` already exists in the repo for exactly this. Open
    it and it exposes `window.renderAt2x(name)` which fetches `<name>.svg`,
-   inlines it, sets width/height to 2x, and returns `{w, h}`. Then set the
-   viewport to `{w, h}` and screenshot with
-   `clip: {x: 0, y: 0, width: w, height: h}`.
+   inlines it, sets width/height to 2x, hides its own toolbar, and returns
+   `{w, h, x, y}`. Then set the viewport to `{w, h}` and screenshot with
+   `clip: {x, y, width: w, height: h}` using the returned `x/y`.
 
-## Four things that will waste your time if you don't know them
+## Five things that will waste your time if you don't know them
 
-1. **Do NOT navigate directly to a `.svg` file.** An SVG document has no
+1. **Clip to the returned x/y, never a hardcoded 0,0.** The harness has a
+   toolbar laid out above the figure. If it is visible, the SVG starts 38px
+   down the page, so a clip at 0,0 captures the toolbar and silently cuts 38px
+   off the bottom of the figure. The PNG still has the exact right
+   dimensions, so this passes a size check and looks fine unless you inspect
+   the pixels. `renderAt2x` now hides the toolbar, but clip to the returned
+   coordinates anyway.
+
+2. **Do NOT navigate directly to a `.svg` file.** An SVG document has no
    `document.body`, so any script touching `document.body.style` dies with
    `Cannot read properties of null (reading 'style')`. Always host the SVG
    markup inside an HTML page - which is what `export-png.html` does.
 
-2. **No Node APIs inside the browser-eval tool.** `require` is not defined, so
+3. **No Node APIs inside the browser-eval tool.** `require` is not defined, so
    you cannot use `fs` to mkdir or stat files from inside `runPlaywrightCode`.
    Create directories and check file sizes from the shell instead.
 
-3. **Get a real page ID first.** Call `openBrowserPage` and use the ID it
+4. **Get a real page ID first.** Call `openBrowserPage` and use the ID it
    returns. Reusing a guessed or stale ID fails with `Page ... not found`.
+   Viewport size can also silently revert; set it *after* `goto`, then assert
+   the rendered width before screenshotting.
 
-4. **If `fetch()` of the local `.svg` is blocked** by file:// CORS on your
+5. **If `fetch()` of the local `.svg` is blocked** by file:// CORS on your
    host, fall back to: read the SVG text with your file-read tool, then
    `page.setContent()` with the markup wrapped in
    `<!doctype html><meta charset='utf-8'><style>html,body{margin:0;padding:0}svg{display:block}</style>` + markup.
@@ -102,7 +112,7 @@ Report a table of filename, dimensions, file size, and colour type.
 
 ## Expected result
 
-Six PNGs in `figures/png/`, all exactly 2000px wide:
+Six PNGs in `png/`, all exactly 2000px wide:
 
 | Figure | Dimensions |
 | --- | --- |

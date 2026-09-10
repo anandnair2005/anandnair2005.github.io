@@ -5,7 +5,7 @@ date: 2026-08-10
 series: "The NanoChat Speedrun"
 part: 1
 tags: [nanochat, gpu, training, llm]
-image: /figures/sssl-window.svg
+image: /figures/nanochat-speedrun-part-1/sssl-window.svg
 ---
 
 > **Disclosure:** I used AI assistance to edit and refine this post, but the ideas, interpretations, and conclusions are mine.
@@ -36,7 +36,7 @@ That has a consequence worth stating early: the wall-clock time and the final bi
 
 One scope note. The reference speedrun path runs SFT and chat evaluation but not RL. NanoChat does ship [`scripts/chat_rl.py`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/scripts/chat_rl.py), but it sits outside the path I followed.
 
-![The whole project on one page](/figures/repo-map.svg)
+![The whole project on one page](/figures/nanochat-speedrun-part-1/repo-map.svg)
 
 *The whole project on one page. Bar length is the wall-clock time each stage actually took in my run, and the lines show which library modules each stage touches. Everything after this section is a zoom into `base_train`.*
 
@@ -69,7 +69,7 @@ The rounding step shows the layering. `base_dim` is `depth × 64`, which for dep
 
 The full derivation, with the paper behind each rule, is in [Appendix B](#appendix-b). The short version: batch size follows [Power Lines](https://arxiv.org/abs/2505.13738), scaling roughly as `D^0.383`; learning rate follows standard square-root batch scaling; weight decay follows the [T_epoch framework](https://arxiv.org/abs/2405.13698), keeping `B / (η × λ × D)` approximately constant.
 
-![One integer fixing everything below it](/figures/depth-cascade.svg)
+![One integer fixing everything below it](/figures/nanochat-speedrun-part-1/depth-cascade.svg)
 
 *One integer fixing everything below it. `d12` is the measured anchor, which is why its scaling factors are exactly `1.0`; the `d24` column is the configuration I planned to run, derived by hand from the formulas before I ran anything.*
 
@@ -118,7 +118,7 @@ This is also the one place I found where the repository contradicts itself. The 
 
 The code is right and the comment is stale. In a repository built this carefully, that was genuinely the only inconsistency I found worth reporting &mdash; and it is a comment, not behaviour. Trust the arithmetic.
 
-![Bar width is the attention window, so the ratio is the whole story](/figures/sssl-window.svg)
+![Bar width is the attention window, so the ratio is the whole story](/figures/nanochat-speedrun-part-1/sssl-window.svg)
 
 *Bar width is the attention window, so the ratio is the whole story. Eighteen of twenty-four layers never see more than 512 tokens; the six gold bars carry every long-range interaction in the model.*
 
@@ -180,7 +180,7 @@ The interesting word is *eligible*. The filter skips layers whose dimensions are
 
 So I counted the modules by hand. A depth-24 model has 24 blocks, each with 6 linear matrices, plus the `lm_head`: 145 conversions. The layers that should fail the filter are the twelve `ve_gate` projections, each `Linear(12, 12)` &mdash; 12 is not divisible by 16 &mdash; and the single `smear_gate`, which is `Linear(24, 1)` and far below any sensible minimum. That is 13 skipped, 158 total.
 
-![Every linear layer in the model, drawn at the same size so the proportion is honest](/figures/precision-map.svg)
+![Every linear layer in the model, drawn at the same size so the proportion is honest](/figures/nanochat-speedrun-part-1/precision-map.svg)
 
 *Every linear layer in the model, drawn at the same size so the proportion is honest. The thirteen the filter refuses are not an oversight: twelve `ve_gate` projections that fail the divisible-by-16 rule, and one `smear_gate` far below any workable dimension.*
 
@@ -204,7 +204,7 @@ Each rank receives one slice of the gradient via `reduce_scatter`, updates only 
 
 Three goals, all visible in the structure: overlap communication with computation, cut optimizer memory, batch small transfers into fewer large ones. And because it is an explicit phase rather than a hook buried in a wrapper's backward pass, you can *see* where the distributed boundary is. Gradients stay rank-local through all eight micro-batches &mdash; precisely where a DDP-wrapped model would already be all-reducing.
 
-![One step, four ranks, one time axis](/figures/optimizer-step.svg)
+![One step, four ranks, one time axis](/figures/nanochat-speedrun-part-1/optimizer-step.svg)
 
 *One step, four ranks, one time axis. The dashed line marks where an ordinary DDP-wrapped model would already have been all-reducing; here the gradients are still rank-local, and communication happens afterwards as an explicit async phase.*
 
@@ -226,7 +226,7 @@ Two details are easy to miss. Row capacity is `T + 1 = 2049`, not 2048, because 
 
 The result is 100% utilization. No padding, ever. Every token in every batch is a real token contributing to the loss.
 
-![Successive states of a single row](/figures/bestfit-packing.svg)
+![Successive states of a single row](/figures/nanochat-speedrun-part-1/bestfit-packing.svg)
 
 *Successive states of a single row. Two documents are placed whole, then nothing in the buffer fits the remaining 270 tokens, so the shortest buffered document is cropped to fill it exactly. The red block is what that costs.*
 
@@ -276,6 +276,7 @@ Reading code and predicting behaviour are different activities, and only the sec
 | 6 | Base training is GPU-bound, so half the GPUs should take roughly twice as long as the 8&times;H100 reference of 1.65 h | Materially better or worse than about 2&times; |
 | 7 | Utilization is high and *stable* &mdash; not a good average hiding a bad distribution | MFU that sags, spikes, or decays across the run |
 | 8 | The whole thing lands well under the old $100 GPT-2 line | It does not |
+{: .wide}
 
 The first five are checkable from the run log alone. The last three need the run to finish.
 
@@ -307,6 +308,7 @@ Part 2 rents the GPUs and works down the list.
 | Query heads | `n_head = num_heads` | Number of query attention heads |
 | KV heads | `n_kv_head`, equal to `n_head` in base training | GQA is supported in the model definition; base training does not use it |
 | Window pattern | `window_pattern`, default `SSSL` | Per-layer attention window; `S` is a quarter of context, `L` is full |
+{: .wide}
 
 Source: [`GPTConfig`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/nanochat/gpt.py#L28-L40) and [`build_model_meta`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/scripts/base_train.py#L130-L144).
 
@@ -324,6 +326,7 @@ Inputs and reference constants:
 | `weight_decay` | `0.28` | Reference weight decay, before scaling |
 | `d12_ref` | `build_model_meta(12)` | The measured anchor model |
 | `B_REF` | `2**19` = `524,288` | Reference batch size for `d12` |
+{: .wide}
 
 Derived values:
 
@@ -338,6 +341,7 @@ Derived values:
 | `total_batch_size` | `B_REF × (target_tokens / D_REF)^0.383`, rounded to a power of two | [Power Lines](https://arxiv.org/abs/2505.13738) |
 | `batch_lr_scale` | `η ∝ √(total_batch_size / B_REF)` | Square-root batch scaling for AdamW, applied to Muon as a practical assumption |
 | `weight_decay_scaled` | `λ = λ_ref × √(B / B_REF) × (D_REF / D)` | [T_epoch](https://arxiv.org/abs/2405.13698): keep `B / (η × λ × D)` roughly constant |
+{: .wide}
 
 Reference-model extrapolation follows [muP](https://arxiv.org/abs/2203.03466)-style transfer from the measured `d12` anchor.
 

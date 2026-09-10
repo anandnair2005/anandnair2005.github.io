@@ -228,4 +228,13 @@ a.pill:hover { background: var(--line); color: var(--ink); }
   .card-thumb { flex: 0 0 100px; }
   .card-thumb img { width: 100px; height: 70px; }
   .nav a { margin-left: 16px; }
+
+  /* Below the breakout threshold there is no room to grow, so a wide table
+     behaves like every other one: in the column, scrolling inside its own
+     box rather than pushing the page sideways. */
+  .post-body table.wide {
+    display: block; overflow-x: auto;
+    width: 100%;
+    margin-left: 0; transform: none;
+  }
 }

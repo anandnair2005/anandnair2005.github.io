@@ -36,6 +36,7 @@ exclude:
   - Gemfile.lock
   - vendor
   - preview-*.html
-  - figures/export-png.html
-  - figures/png-export-prompt.md
-  - figures/__pycache__
+  - figures/figlib.py
+  - figures/figtools.py
+  - figures/*/build_all.py
+  - figures/*/export_png.py

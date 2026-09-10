@@ -35,6 +35,30 @@ MONO = ("ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',"
 OUT = os.path.dirname(os.path.abspath(__file__))
 
 
+def output_to(path):
+    """Point subsequent save() calls at a directory.
+
+    figlib is shared, but figures are written per post, so the output
+    directory is set by whoever is driving the build. Accepts a directory or
+    a module's __file__.
+    """
+    global OUT
+    OUT = path if os.path.isdir(path) else os.path.dirname(os.path.abspath(path))
+
+
+# Type and spacing scale, shared by every figure so they look like a set.
+# The page's body text is 20px serif on a 34px line in a 680px column, and a
+# figure should read as subordinate to it: smaller type, and a canvas that
+# fits the reading column instead of breaking out of it. Figures render at
+# 1:1, so these are literally the painted pixel sizes.
+FS_TITLE = 15     # the one-line claim at the top
+FS_BODY = 13      # labels and values
+FS_META = 11      # annotations, footnotes, axis ticks
+PAD = 28          # canvas margin
+ROW = 26          # vertical rhythm for stacked rows, ~2x FS_BODY
+MAXW = 660        # keep inside the 680px reading column
+
+
 def esc(s):
     return (str(s).replace("&", "&amp;").replace("<", "&lt;")
             .replace(">", "&gt;").replace('"', "&quot;"))

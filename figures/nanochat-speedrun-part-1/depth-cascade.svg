@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="422" height="348" viewBox="0 0 422 348" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" role="img" aria-label="The --depth cascade: one integer determines width, heads, batch size, learning-rate scaling and training horizon.">
+<rect width="422" height="348" fill="#333333"/>
+<text x="28" y="24" font-size="15" fill="#DDDDDD">One integer fixes <tspan fill="#F0AC5F" font-weight="600">everything below it</tspan></text>
+<text x="196.0" y="46.0" font-size="11" fill="#888888" text-anchor="middle">d12  reference</text>
+<text x="328.0" y="46.0" font-size="11" fill="#F0AC5F" text-anchor="middle">d24  the run</text>
+<line x1="28.0" y1="54.0" x2="394.0" y2="54.0" stroke="#736357" stroke-width="1" opacity="0.4"/>
+<line x1="33.0" y1="66.0" x2="33.0" y2="92.0" stroke="#736357" stroke-width="2" opacity="0.5"/>
+<rect x="29.0" y="58.0" width="9.0" height="9.0" rx="5" fill="#F0AC5F"/>
+<text x="47.0" y="66.0" font-size="13" fill="#DDDDDD" text-anchor="start" font-weight="600" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">depth</text>
+<text x="196.0" y="66.0" font-size="13" fill="#888888" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">12</text>
+<text x="328.0" y="66.0" font-size="13" fill="#F0AC5F" text-anchor="middle" font-weight="600" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">24</text>
+<line x1="33.0" y1="92.0" x2="33.0" y2="118.0" stroke="#736357" stroke-width="2" opacity="0.5"/>
+<rect x="29.0" y="84.0" width="9.0" height="9.0" rx="5" fill="#58C4DD"/>
+<text x="47.0" y="92.0" font-size="13" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">base_dim</text>
+<text x="196.0" y="92.0" font-size="13" fill="#888888" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">768</text>
+<text x="328.0" y="92.0" font-size="13" fill="#58C4DD" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">1,536</text>
+<line x1="33.0" y1="118.0" x2="33.0" y2="144.0" stroke="#736357" stroke-width="2" opacity="0.5"/>
+<rect x="29.0" y="110.0" width="9.0" height="9.0" rx="5" fill="#58C4DD"/>
+<text x="47.0" y="118.0" font-size="13" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">model_dim</text>
+<text x="196.0" y="118.0" font-size="13" fill="#888888" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">768</text>
+<text x="328.0" y="118.0" font-size="13" fill="#58C4DD" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">1,536</text>
+<line x1="33.0" y1="144.0" x2="33.0" y2="170.0" stroke="#736357" stroke-width="2" opacity="0.5"/>
+<rect x="29.0" y="136.0" width="9.0" height="9.0" rx="5" fill="#58C4DD"/>
+<text x="47.0" y="144.0" font-size="13" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">num_heads</text>
+<text x="196.0" y="144.0" font-size="13" fill="#888888" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">6</text>
+<text x="328.0" y="144.0" font-size="13" fill="#58C4DD" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">12</text>
+<line x1="33.0" y1="170.0" x2="33.0" y2="196.0" stroke="#736357" stroke-width="2" opacity="0.5"/>
+<rect x="29.0" y="162.0" width="9.0" height="9.0" rx="5" fill="#58C4DD"/>
+<text x="47.0" y="170.0" font-size="13" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">total_batch_size</text>
+<text x="196.0" y="170.0" font-size="13" fill="#888888" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">524,288</text>
+<text x="328.0" y="170.0" font-size="13" fill="#58C4DD" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">1,048,576</text>
+<line x1="33.0" y1="196.0" x2="33.0" y2="222.0" stroke="#736357" stroke-width="2" opacity="0.5"/>
+<rect x="29.0" y="188.0" width="9.0" height="9.0" rx="5" fill="#58C4DD"/>
+<text x="47.0" y="196.0" font-size="13" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">lr_scale</text>
+<text x="196.0" y="196.0" font-size="13" fill="#888888" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">1.0</text>
+<text x="328.0" y="196.0" font-size="13" fill="#58C4DD" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">1.4142</text>
+<line x1="33.0" y1="222.0" x2="33.0" y2="248.0" stroke="#736357" stroke-width="2" opacity="0.5"/>
+<rect x="29.0" y="214.0" width="9.0" height="9.0" rx="5" fill="#58C4DD"/>
+<text x="47.0" y="222.0" font-size="13" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">adamw_lr_scale</text>
+<text x="196.0" y="222.0" font-size="13" fill="#888888" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">1.0</text>
+<text x="328.0" y="222.0" font-size="13" fill="#58C4DD" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">0.707107</text>
+<line x1="33.0" y1="248.0" x2="33.0" y2="274.0" stroke="#736357" stroke-width="2" opacity="0.5"/>
+<rect x="29.0" y="240.0" width="9.0" height="9.0" rx="5" fill="#58C4DD"/>
+<text x="47.0" y="248.0" font-size="13" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">iterations</text>
+<text x="196.0" y="248.0" font-size="13" fill="#888888" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">—</text>
+<text x="328.0" y="248.0" font-size="13" fill="#58C4DD" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">5,568</text>
+<rect x="29.0" y="266.0" width="9.0" height="9.0" rx="5" fill="#58C4DD"/>
+<text x="47.0" y="274.0" font-size="13" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">training tokens</text>
+<text x="196.0" y="274.0" font-size="13" fill="#888888" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">—</text>
+<text x="328.0" y="274.0" font-size="13" fill="#58C4DD" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">5,838,471,168</text>
+<text x="28.0" y="308.0" font-size="11" fill="#736357" text-anchor="start">d12 is the measured anchor, so its scales are exactly 1.0,</text>
+<text x="28.0" y="324.0" font-size="11" fill="#736357" text-anchor="start">every other depth extrapolates from it.</text>
+</svg>

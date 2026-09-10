@@ -3,13 +3,15 @@
 <title>Figure PNG export (for Medium)</title>
 <!--
   Medium accepts .JPG / .JPEG / .GIF / .PNG only - not SVG - and wants images
-  at least 1192px wide for all placement options. This page renders each SVG
-  at 2x (2000px wide) so a screenshot of the element is a publish-ready PNG.
+  at least 1192px wide for all placement options. Figures are drawn between
+  685 and 1000 units wide, so this page renders each at 2x to clear that bar.
 
-  Manual use:  open this file, pick a figure, screenshot the black canvas.
-  Scripted:    drive renderAt2x(name) then clip-screenshot to figures/png/.
+  Manual use:  open this file, pick a figure, screenshot the dark canvas.
+               Reload to choose another (picking one hides the toolbar).
+  Scripted:    drive renderAt2x(name), which hides the toolbar and returns
+               {w, h, x, y}; clip the screenshot to those bounds.
 
-  The committed PNGs in figures/png/ are already built; regenerate only when a
+  The committed PNGs in png/ are already built; regenerate only when a
   figure changes.
 -->
 <style>
@@ -33,7 +35,14 @@
     const [, , w, h] = svg.getAttribute('viewBox').split(' ').map(Number);
     svg.setAttribute('width', w * SCALE);
     svg.setAttribute('height', h * SCALE);
-    return { w: w * SCALE, h: h * SCALE };
+    // The toolbar is laid out above the figure, so leaving it visible pushes
+    // the SVG down the page: a screenshot clipped at 0,0 would then capture
+    // the toolbar and cut the same number of pixels off the bottom of the
+    // figure. Hide it so the figure starts at the page origin, and return its
+    // measured position so a caller can clip defensively either way.
+    document.getElementById('bar').style.display = 'none';
+    const r = svg.getBoundingClientRect();
+    return { w: w * SCALE, h: h * SCALE, x: Math.round(r.x), y: Math.round(r.y) };
   };
 
   const bar = document.getElementById('bar');
