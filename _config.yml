@@ -36,6 +36,7 @@ exclude:
   - Gemfile.lock
   - vendor
   - preview-*.html
+  - preview.py
   # Figure infrastructure and tooling live beside the figures but are not part
   # of the site. The per-post generators are deliberately NOT excluded: they
   # assert their numbers against the run log, and being able to read them is

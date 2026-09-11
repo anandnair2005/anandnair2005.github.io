@@ -137,29 +137,29 @@ a.pill:hover { background: var(--line); color: var(--ink); }
   border-left: 3px solid var(--ink); color: var(--ink-2);
 }
 
-/* Figures and tables break out of the 680px measure.
-   The generated figures are 1400px wide; at reading width the token
-   labels inside them would be illegible. min() keeps the breakout
-   inside the viewport so it never creates a horizontal scrollbar. */
-.post-body figure,
-.post-body p > img {
+/* Images render at their natural size, centred in the reading column.
+
+   kramdown turns a standalone ![alt](src) into <p><img>, NOT <figure>, so
+   both shapes have to be sized the same way. An earlier version sized only
+   `figure img` and left `p > img` on a 1200px breakout with max-width:none,
+   which stretched every diagram to 1200px - scaling a 422px-wide figure by
+   2.8x, magnifying its text with it, and making it taller than the viewport.
+
+   Figures are drawn to fit the measure now, so nothing needs to break out. */
+.post-body figure {
   display: block;
-  margin-left: 50%;
-  transform: translateX(-50%);
-  width: min(var(--wide), calc(100vw - 48px));
-  max-width: none;
-  margin-top: 28px; margin-bottom: 28px;
+  margin: 28px auto;
+  max-width: 100%;
 }
-/* Figures carry their own width and height, so they have an intrinsic size.
-   width:auto lets each one render at the size it was drawn rather than being
-   stretched to the full breakout column; max-width caps the largest and keeps
-   every figure inside the viewport on small screens. */
-.post-body figure img {
+
+.post-body figure img,
+.post-body p > img {
   display: block;
   width: auto;
   max-width: min(100%, var(--figmax));
   height: auto;
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* border-radius on a replaced element clips its content, so the dark SVG
@@ -170,6 +170,19 @@ a.pill:hover { background: var(--line); color: var(--ink); }
 .post-body p > img {
   border: 1px solid var(--line-2);
   border-radius: 10px;
+}
+
+/* A bare image carries its own vertical rhythm; one inside a <figure> gets it
+   from the figure instead. */
+.post-body p > img {
+  margin-top: 28px;
+  margin-bottom: 28px;
+}
+
+/* The <p> kramdown wraps a standalone image in holds no text, so it should not
+   stack paragraph spacing on top of the image's own margins. */
+.post-body p:has(> img:only-child) {
+  margin: 0;
 }
 .post-body figcaption {
   max-width: var(--read); margin: 10px auto 0;
