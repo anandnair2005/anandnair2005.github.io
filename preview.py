@@ -1,7 +1,7 @@
 """
 Render a post to a standalone HTML preview, for checking layout locally.
 
-    python preview.py                    # newest post
+    python preview.py                     # newest post
     python preview.py _posts/2026-08-10-nanochat-speedrun-part-1.md
 
 Writes preview-<slug>.html next to this script. Needs Python 3 and nothing
@@ -45,7 +45,7 @@ MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
           "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
 
-# ---------------------------------------------------------------------- front matter
+# --------------------------------------------------------------- front matter
 
 def split_front_matter(text):
     if not text.startswith("---"):
@@ -59,15 +59,15 @@ def split_front_matter(text):
         m = re.match(r"^(\w+):\s*(.*)$", line)
         if m:
             key, value = m.group(1), m.group(2).strip()
-            meta[key] = value.strip('"\'') if value else []
+            meta[key] = value.strip('"') if value else []
         elif line.lstrip().startswith("-") and key:
             if not isinstance(meta.get(key), list):
                 meta[key] = []
-            meta[key].append(line.lstrip()[1:].strip().strip('"\''))
+            meta[key].append(line.lstrip()[1:].strip().strip('"'))
     return meta, body
 
 
-# ---------------------------------------------------------------------- inline
+# ------------------------------------------------------------------- inline
 
 def inline(s):
     """Span-level markdown. Code spans are protected from other rules."""
@@ -82,7 +82,7 @@ def inline(s):
                lambda m: f'<img src="{m.group(2).lstrip("/")}" alt="{m.group(1)}">', s)
     s = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r'<a href="\2">\1</a>', s)
     s = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", s)
-    s = re.sub(r"(?<![*])\*([^\*\n]+)\*(?![*])", r"<em>\1</em>", s)
+    s = re.sub(r"(?<![*\w])\*([^*\n]+)\*(?![\*])", r"<em>\1</em>", s)
 
     def pop(m):
         return f"<code>{html.escape(spans[int(m.group(1))])}</code>"
@@ -92,11 +92,11 @@ def inline(s):
 
 def slugify(s):
     s = re.sub(r"<[^>]+>", "", s)
-    s = re.sub(r"&[^;]+;", "", s)
+    s = re.sub(r"&[a-z]+;", " ", s)
     return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
 
 
-# ---------------------------------------------------------------------- blocks
+# -------------------------------------------------------------------- blocks
 
 def render(body):
     lines = body.split("\n")
@@ -112,14 +112,14 @@ def render(body):
         line = lines[i]
         stripped = line.strip()
 
-        # Kramdown inline attribute list: applies to the block just emitted
-        m = re.match(r"^\{:\s*([^}]+)\}\s*$", stripped)
+        # kramdown inline attribute list: applies to the block just emitted
+        m = re.match(r"^\{:\s*([^}]+)\}$", stripped)
         if m:
             attr = m.group(1).strip()
             if out and attr.startswith("."):
                 cls = attr[1:]
                 for j in range(len(out) - 1, -1, -1):
-                    tag = re.match(r"^(table|figure|p|blockquote)", out[j])
+                    tag = re.match(r"^<(table|figure|p|blockquote)", out[j])
                     if tag:
                         out[j] = out[j].replace(f"<{tag.group(1)}",
                                                 f'<{tag.group(1)} class="{cls}"', 1)
@@ -149,7 +149,7 @@ def render(body):
             i += 1
             cls = f' class="language-{lang}"' if lang else ""
             out.append(f'<div class="highlight"><pre><code{cls}>'
-                       f'{html.escape("\n".join(buf))}</code></pre></div>')
+                       f'{html.escape(chr(10).join(buf))}</code></pre></div>')
             continue
 
         # heading
@@ -176,47 +176,47 @@ def render(body):
             out.append(t + "</tbody></table>")
             continue
 
-    # blockquote
-    if stripped.startswith(">"):
-        buf = []
-        while i < len(lines) and lines[i].strip().startswith(">"):
-            buf.append(re.sub(r"^>\s*", "", lines[i]))
+        # blockquote
+        if stripped.startswith(">"):
+            buf = []
+            while i < len(lines) and lines[i].strip().startswith(">"):
+                buf.append(re.sub(r"^\s*>\s?", "", lines[i]))
+                i += 1
+            out.append(f"<blockquote><p>{inline(' '.join(buf))}</p></blockquote>")
+            continue
+
+        # list
+        if re.match(r"^[-*]\s+|^\d+\.\s+", stripped):
+            ordered = bool(re.match(r"^\d+\.", stripped))
+            tag = "ol" if ordered else "ul"
+            buf = []
+            while i < len(lines) and re.match(r"^\s*([-*]\s+|\d+\.\s+)", lines[i]):
+                buf.append(re.sub(r"^\s*([-*]\s+|\d+\.\s+)", "", lines[i]))
+                i += 1
+            items = "".join(f"<li>{inline(b)}</li>" for b in buf)
+            out.append(f"<{tag}>{items}</{tag}>")
+            continue
+
+        # A standalone image. kramdown wraps this in a paragraph rather than a
+        # <figure>, and the preview must match: emitting <figure> here once
+        # hid a CSS bug that only affected the real, <p>-wrapped markup.
+        m = re.match(r"^!\[([^\]]*)\]\(([^)]+)\)$", stripped)
+        if m:
+            alt, src = m.group(1), m.group(2).lstrip("/")
+            out.append(f'<p><img src="{src}" alt="{html.escape(alt)}"></p>')
             i += 1
-        out.append(f"<blockquote><p>{inline(' '.join(buf))}</p></blockquote>")
-        continue
+            continue
 
-    # list
-    if re.match(r"^[-*]\s+|\d+\.\s+", stripped):
-        ordered = bool(re.match(r"^\d+\.", stripped))
-        tag = "ol" if ordered else "ul"
+        # paragraph
         buf = []
-        while i < len(lines) and re.match(r"^[-*]\s+|\d+\.\s+", lines[i]):
-            buf.append(re.sub(r"^[-*]\s+|\d+\.\s+", "", lines[i]))
+        while i < len(lines) and lines[i].strip() and not re.match(
+                r"^\s*(\||>|#{1,6}\s|```|`|\{:|[-*]\s+|\d+\.\s+)", lines[i]):
+            buf.append(lines[i].strip())
             i += 1
-        items = "".join(f"<li>{inline(b)}</li>" for b in buf)
-        out.append(f"<{tag}>{items}</{tag}>")
-        continue
-
-    # A standalone image. kramdown wraps this in a paragraph rather than a
-    # <figure>, and the preview must match: emitting <figure> here once
-    # hid a CSS bug that only affected the real, <p>-wrapped markup.
-    m = re.match(r"^!\[([^\]]*)\]\(([^)]+)\)$", stripped)
-    if m:
-        alt, src = m.group(1), m.group(2).lstrip("/")
-        out.append(f'<p><img src="{src}" alt="{html.escape(alt)}"></p>')
-        i += 1
-        continue
-
-    # paragraph
-    buf = []
-    while i < len(lines) and lines[i].strip() and not re.match(
-            r"^\s*(>|#{1,6}\s|```|`|\{:|[-*]\s+|\d+\.\s+)", lines[i]):
-        buf.append(lines[i].strip())
-        i += 1
-    if buf:
-        out.append(f"<p>{inline(' '.join(buf))}</p>")
-    else:
-        i += 1
+        if buf:
+            out.append(f"<p>{inline(' '.join(buf))}</p>")
+        else:
+            i += 1
 
     return "\n".join(out)
 
@@ -231,67 +231,68 @@ def read_time(rendered):
 
 PAGE = """<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{title} &middot; PREVIEW</title>
-  <link rel="stylesheet" href="assets/css/style.css">
-  <style>
-    /* preview-only banner, not part of the site */
-    .preview-note {{
-      position: fixed; right: 12px; bottom: 12px; z-index: 99;
-      background: #242424; color: #fff; border-radius: 6px;
-      padding: 6px 10px; font: 12px/1.4 system-ui, sans-serif; opacity: .85;
-    }}
-  </style>
-</head>
-<body>
-<header class="site-head">
-  <div class="wrap">
-    <a class="brand" href="#">
-      <img src="assets/img/avatar.png" alt="">
-      <span>{site_title}</span>
-    </a>
-    <nav class="nav">
-      <a href="#">Archive</a><a href="#">Topics</a><a href="#">About</a>
-    </nav>
-  </div>
-</header>
-<main>
-  <article class="post">
-    <div class="post-head">
-      {series}
-      <h1>{title}</h1>
-      {subtitle}
-      <div class="byline">
-        <img src="assets/img/avatar.png" alt="">
-        <div>
-          <div>{author}</div>
-          <div><time>{date}</time> &middot; {minutes} min read</div>
-        </div>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{title} &middot; PREVIEW</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+      /* preview-only banner, not part of the site */
+      .preview-note {{
+        position: fixed; right: 12px; bottom: 12px; z-index: 99;
+        background: #242424; color: #fff; border-radius: 6px;
+        padding: 6px 10px; font: 12px/1.4 system-ui, sans-serif; opacity: .85;
+      }}
+    </style>
+  </head>
+  <body>
+    <header class="site-head">
+      <div class="wrap">
+        <a class="brand" href="#">
+          <img src="assets/img/avatar.png" alt="">
+          <span>{site_title}</span>
+        </a>
+        <nav class="nav">
+          <a href="#">Archive</a><a href="#">Topics</a><a href="#">About</a>
+        </nav>
       </div>
-    </div>
-
-    <div class="post-body">
+    </header>
+    <main>
+      <article class="post">
+        <div class="post-head">
+          {series}
+          <h1>{title}</h1>
+          {subtitle}
+          <div class="byline">
+            <img src="assets/img/avatar.png" alt="">
+            <div>
+              <div>{author}</div>
+              <div><time>{date}</time> &middot; {minutes} min read</div>
+            </div>
+          </div>
+        </div>
+    
+        <div class="post-body">
 {body}
-    </div>
-
-    <div class="post-foot">
-      {tags}
-    </div>
-  </article>
-</main>
-<footer class="site-foot">
-  <div class="wrap">
-    &copy; 2026 {author} &middot;
-    <a href="#">RSS</a> &middot; <a href="#">GitHub</a> &middot;
-    <a href="#">Medium</a>
-  </div>
-</footer>
-<div class="preview-note">local preview &middot; not kramdown</div>
-</body>
+        </div>
+    
+        <div class="post-foot">
+          {tags}
+        </div>
+      </article>
+    </main>
+    <footer class="site-foot">
+      <div class="wrap">
+        &copy; 2026 {author} &middot;
+        <a href="#">RSS</a> &middot; <a href="#">GitHub</a> &middot;
+        <a href="#">Medium</a>
+      </div>
+    </footer>
+    <div class="preview-note">local preview &middot; not kramdown</div>
+  </body>
 </html>
 """
+
 
 def build(path):
     with open(path, encoding="utf-8") as fh:
@@ -307,7 +308,6 @@ def build(path):
     if meta.get("series"):
         series = (f'<div class="series-flag">{meta["series"]} &middot; '
                   f'Part {meta.get("part", "1")}</div>')
-
 
     subtitle = ""
     if meta.get("subtitle"):
@@ -336,6 +336,7 @@ def build(path):
         fh.write(page)
     return out, rendered
 
+
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         target = sys.argv[1]
@@ -347,7 +348,7 @@ if __name__ == "__main__":
 
     out, rendered = build(target)
     print(f"  {os.path.basename(target)}")
-    print(f" -> {os.path.basename(out)} ({os.path.getsize(out) / 1024:.1f} KB)")
+    print(f"  -> {os.path.basename(out)}  ({os.path.getsize(out) / 1024:.1f} KB)")
     for pattern, label in (("<p><img", "images"), ("<table", "tables"),
-                           ("h2", "sections"), ('<div class="highlight"', "code blocks")):
-        print(f"      {rendered.count(pattern):3d} {label}")
+                           ("<h2", "sections"), ('<div class="highlight"', "code blocks")):
+        print(f"     {rendered.count(pattern):3d} {label}")
