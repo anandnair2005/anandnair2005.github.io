@@ -46,17 +46,21 @@ def output_to(path):
     OUT = path if os.path.isdir(path) else os.path.dirname(os.path.abspath(path))
 
 
-# Type and spacing scale, shared by every figure so they look like a set.
-# The page's body text is 20px serif on a 34px line in a 680px column, and a
-# figure should read as subordinate to it: smaller type, and a canvas that
-# fits the reading column instead of breaking out of it. Figures render at
-# 1:1, so these are literally the painted pixel sizes.
+# Drawing coordinates are authored against the 680px reading column, which
+# keeps the internal proportions honest: a 13px label really is subordinate to
+# the 20px body serif. DISPLAY_SCALE then presents the finished figure larger
+# than it was drawn, so the whole thing - type included - grows together.
 FS_TITLE = 15     # the one-line claim at the top
 FS_BODY = 13      # labels and values
 FS_META = 11      # annotations, footnotes, axis ticks
 PAD = 28          # canvas margin
 ROW = 26          # vertical rhythm for stacked rows, ~2x FS_BODY
-MAXW = 660        # keep inside the 680px reading column
+MAXW = 660        # authored width ceiling, before DISPLAY_SCALE
+
+# Presented size as a multiple of the authored size. The viewBox is unchanged,
+# so this only sets the intrinsic width/height attributes: the SVG scales
+# itself, stays sharp, and no layout inside the figure has to be re-tuned.
+DISPLAY_SCALE = 1.25
 
 
 def esc(s):
@@ -78,8 +82,10 @@ class Fig:
         self.o = [self._head(), self._bg()]
 
     def _head(self):
+        # viewBox stays in authored units; width/height present it larger.
         return (f'<svg xmlns="http://www.w3.org/2000/svg" '
-                f'width="{self.w}" height="{self.h}" '
+                f'width="{round(self.w * DISPLAY_SCALE)}" '
+                f'height="{round(self.h * DISPLAY_SCALE)}" '
                 f'viewBox="0 0 {self.w} {self.h}" '
                 f'font-family="{SANS}" role="img" aria-label="{esc(self.label)}">')
 

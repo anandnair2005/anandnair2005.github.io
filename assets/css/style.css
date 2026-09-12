@@ -18,9 +18,11 @@
 
   --wide: 1200px;   /* figure / table breakout width */
   --read: 680px;    /* reading measure, matches Medium */
-  --figmax: 680px;    /* figures never exceed the reading column */
+  --figmax: 860px;   /* figure ceiling: wider than the text, inside the tables */
   --wide-table: 900px; /* opt-in breakout for sentence-heavy tables */
 }
+
+
 
 * { box-sizing: border-box; }
 
@@ -137,7 +139,7 @@ a.pill:hover { background: var(--line); color: var(--ink); }
   border-left: 3px solid var(--ink); color: var(--ink-2);
 }
 
-/* Images render at their natural size, centred in the reading column.
+/* Images render at their natural size, centred on the reading column.
 
    kramdown turns a standalone ![alt](src) into <p><img>, NOT <figure>, so
    both shapes have to be sized the same way. An earlier version sized only
@@ -145,7 +147,11 @@ a.pill:hover { background: var(--line); color: var(--ink); }
    which stretched every diagram to 1200px - scaling a 422px-wide figure by
    2.8x, magnifying its text with it, and making it taller than the viewport.
 
-   Figures are drawn to fit the measure now, so nothing needs to break out. */
+   Figures are presented slightly wider than the text measure, so they need a
+   breakout to stay centred. The critical difference from the broken version
+   is `width: auto`: max-width only permits a figure to be wider, it never
+   forces one to be. A figure narrower than the column still renders at its
+   own size. */
 .post-body figure {
   display: block;
   margin: 28px auto;
@@ -156,10 +162,10 @@ a.pill:hover { background: var(--line); color: var(--ink); }
 .post-body p > img {
   display: block;
   width: auto;
-  max-width: min(100%, var(--figmax));
+  max-width: min(var(--figmax), calc(100vw - 48px));
   height: auto;
-  margin-left: auto;
-  margin-right: auto;
+  margin-left: 50%;
+  transform: translateX(-50%);
 }
 
 /* border-radius on a replaced element clips its content, so the dark SVG
@@ -176,6 +182,11 @@ a.pill:hover { background: var(--line); color: var(--ink); }
    from the figure instead. */
 .post-body p > img {
   margin-top: 28px;
+  margin-bottom: 10px;
+}
+
+/* An image with no caption under it keeps the full bottom margin. */
+.post-body p:not(:has(+ p.caption)) > img {
   margin-bottom: 28px;
 }
 
@@ -184,6 +195,24 @@ a.pill:hover { background: var(--line); color: var(--ink); }
 .post-body p:has(> img:only-child) {
   margin: 0;
 }
+
+/* Captions are written as an italic line under the image and tagged with
+   {: .caption}. kramdown never produces <figure>/<figcaption> from image
+   syntax, so this is the only way to caption a figure without writing raw
+   HTML in the post. */
+.post-body p.caption {
+  max-width: var(--read);
+  margin: 0 auto 28px;
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-2);
+  text-align: center;
+}
+.post-body p.caption em {
+  font-style: normal;
+}
+
 .post-body figcaption {
   max-width: var(--read); margin: 10px auto 0;
   font-family: var(--sans); font-size: 13px; color: var(--ink-2); text-align: center;

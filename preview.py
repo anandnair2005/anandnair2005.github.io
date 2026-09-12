@@ -353,6 +353,8 @@ def check(path):
 
     src_images = len(re.findall(r"^!\[", body, re.M))
     src_tables = len(re.findall(r"^\{:\s*\.wide\}", body, re.M))
+    src_caps = len(re.findall(r"^\s*\{:\s*\.caption\}", body, re.M))
+
     src_h2 = len(re.findall(r"^## ", body, re.M))
     src_fences = len(re.findall(r"^```", body, re.M)) // 2
     src_quotes = len(re.findall(r"^>", body, re.M))
@@ -388,6 +390,11 @@ def check(path):
         (f"tables rendered ({src_tables})", r.count("<table") == src_tables),
         (f"table .wide class applied ({src_tables})",
          r.count('<table class="wide"') == src_tables),
+        (f"caption .caption class applied ({src_caps})",
+         r.count('<p class="caption"') == src_caps),
+        ("every image followed by a caption",
+         src_caps == src_images),
+        ("no IAL text leaked into output", "{:" not in r),
         (f"h2 headings ({src_h2})", len(re.findall(r"<h2 ", r)) == src_h2),
         ("h2 headings carry ids", all(
             'id="' in m for m in re.findall(r"<h2[^>]*>", r))),
@@ -397,7 +404,8 @@ def check(path):
         ("code spans rendered", "<code>" in r),
         ("links rendered", '<a href="http' in r),
         ("bold rendered", "<strong>" in r),
-        ("no unclosed paragraphs", r.count("<p>") == r.count("</p>")),
+        ("no unclosed paragraphs",
+         len(re.findall(r"<p\b[^>]*>", r)) == r.count("</p>")),
         ("no raw markdown leaked", not re.search(r"^\s*\|", r, re.M)),
         ("entities left for the browser",
          "&mdash;" in r or "\u2014" in r),

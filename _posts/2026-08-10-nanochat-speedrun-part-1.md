@@ -39,6 +39,7 @@ One scope note. The reference speedrun path runs SFT and chat evaluation but not
 ![The whole project on one page](/figures/nanochat-speedrun-part-1/repo-map.svg)
 
 *The whole project on one page. Bar length is the wall-clock time each stage actually took in my run, and the lines show which library modules each stage touches. Everything after this section is a zoom into `base_train`.*
+{: .caption}
 
 ---
 
@@ -72,6 +73,7 @@ The full derivation, with the paper behind each rule, is in [Appendix B](#append
 ![One integer fixing everything below it](/figures/nanochat-speedrun-part-1/depth-cascade.svg)
 
 *One integer fixing everything below it. `d12` is the measured anchor, which is why its scaling factors are exactly `1.0`; the `d24` column is the configuration I planned to run, derived by hand from the formulas before I ran anything.*
+{: .caption}
 
 I reproduced this derivation by hand for depth 24 before running anything, which gives Part 2 its first thing to check.
 
@@ -121,6 +123,7 @@ The code is right and the comment is stale. In a repository built this carefully
 ![Bar width is the attention window, so the ratio is the whole story](/figures/nanochat-speedrun-part-1/sssl-window.svg)
 
 *Bar width is the attention window, so the ratio is the whole story. Eighteen of twenty-four layers never see more than 512 tokens; the six gold bars carry every long-range interaction in the model.*
+{: .caption}
 
 ---
 
@@ -183,6 +186,7 @@ So I counted the modules by hand. A depth-24 model has 24 blocks, each with 6 li
 ![Every linear layer in the model, drawn at the same size so the proportion is honest](/figures/nanochat-speedrun-part-1/precision-map.svg)
 
 *Every linear layer in the model, drawn at the same size so the proportion is honest. The thirteen the filter refuses are not an oversight: twelve `ve_gate` projections that fail the divisible-by-16 rule, and one `smear_gate` far below any workable dimension.*
+{: .caption}
 
 > **What I expect to see** &mdash; The run should report converting exactly `145` of `158` linear layers and skipping `13`. If the numbers differ, my reading of the filter is wrong.
 
@@ -207,6 +211,7 @@ Three goals, all visible in the structure: overlap communication with computatio
 ![One step, four ranks, one time axis](/figures/nanochat-speedrun-part-1/optimizer-step.svg)
 
 *One step, four ranks, one time axis. The dashed line marks where an ordinary DDP-wrapped model would already have been all-reducing; here the gradients are still rank-local, and communication happens afterwards as an explicit async phase.*
+{: .caption}
 
 > **Not tested here** &mdash; I can read the design, but I have no profiler trace. I will not claim communication was actually hidden behind computation, only that the code is structured so it could be.
 
@@ -229,6 +234,7 @@ The result is 100% utilization. No padding, ever. Every token in every batch is 
 ![Successive states of a single row](/figures/nanochat-speedrun-part-1/bestfit-packing.svg)
 
 *Successive states of a single row. Two documents are placed whole, then nothing in the buffer fits the remaining 270 tokens, so the shortest buffered document is cropped to fill it exactly. The red block is what that costs.*
+{: .caption}
 
 #### Why a third of the tokens get thrown away
 

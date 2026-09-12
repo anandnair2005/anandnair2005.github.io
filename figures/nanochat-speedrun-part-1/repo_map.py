@@ -44,7 +44,7 @@ def build():
     PAD_L = PAD_R = PAD
     LEFT_W = 246
     x_mod = PAD_L + LEFT_W + 92
-    ROW_H = 31            # two lines of text per module row, so wider than ROW
+    ROW_H = 34            # two lines of text per module row, so wider than ROW
     y0 = 58
     FOOT_W = 604
     W = max(x_mod + 210 + PAD_R, FOOT_W + PAD_L + PAD_R)
@@ -69,7 +69,7 @@ def build():
         mod_y[name] = y
         f.rect(x_mod - 11, y - 11, 6, 17, BLUE, r=3)
         f.text(x_mod, y, name, FS_BODY, TEXT, mono=True)
-        f.text(x_mod, y + 13, desc, FS_META, MUTED)
+        f.text(x_mod, y + 15, desc, FS_META, MUTED)
 
     busiest = max(s for _, s, _ in STAGES if s)
     for i, (name, mins, uses) in enumerate(STAGES):
