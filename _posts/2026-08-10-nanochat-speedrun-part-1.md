@@ -1,11 +1,12 @@
 ---
 title: "NanoChat Speedrun, Part 1: The Code That Makes H100s Go Brrrr"
 subtitle: "What I expected before spending anything on GPUs &mdash; a close reading of NanoChat's training stack, and the predictions it let me make."
+description: "A close reading of Nanochat's training stack, and the eight predictions it lets me make before spending anything on GPUs."
 date: 2026-08-10
 series: "The NanoChat Speedrun"
 part: 1
 tags: [nanochat, gpu, training, llm]
-image: /figures/nanochat-speedrun-part-1/sssl-window.svg
+image: /figures/nanochat-speedrun-part-1/png/sssl-window.png
 ---
 
 > **Disclosure:** I used AI assistance to edit and refine this post, but the ideas, interpretations, and conclusions are mine.

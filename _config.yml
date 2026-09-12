@@ -1,11 +1,24 @@
 title: Anand Nair
-tagline: An exploration into the magical world of AI and software technology
+tagline: Sufficiently advanced technology, taken seriously.
 description: >-
   Deep dives into AI and software systems: training runs, GPU internals,
   and the engineering underneath.
 author: Anand Nair
 url: https://anandnair.dev
 baseurl: ""
+
+# jekyll-seo-tag uses this for the publisher logo in structured data, and as
+# the og:image for any page that does not set its own. Without it, sharing the
+# home or about page produces a text-only card.
+logo: /assets/img/avatar.png
+
+# Tells search engines that this site, the GitHub account and the Medium
+# publication are the same author (emitted as schema.org sameAs).
+social:
+  name: Anand Nair
+  links:
+    - https://github.com/anandnair2005
+    - https://medium.com/indistinguishable-from-magic-ai
 
 # Where syndicated copies live. Referenced in the footer only.
 medium_publication: https://medium.com/indistinguishable-from-magic-ai

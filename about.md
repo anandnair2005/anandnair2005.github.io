@@ -4,8 +4,6 @@ title: About
 permalink: /about/
 ---
 
-Placeholder. Replace this with your own introduction.
-
 I write about AI and software systems: what happens when you actually run
 the thing, and what the code underneath is really doing.
 

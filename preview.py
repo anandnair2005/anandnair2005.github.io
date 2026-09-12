@@ -383,8 +383,20 @@ def check(path):
             if head and head not in plain_render:
                 truncated.append(head)
 
+    # The Atom feed is XML, which predefines only lt/gt/amp/quot/apos. An HTML
+    # entity such as &mdash; in a feed field is an undefined entity reference
+    # and breaks the whole feed, so these fields must stay plain text. The
+    # feed image must also be a raster format: many readers cannot draw SVG.
+    desc = meta.get("description") or ""
+    img = meta.get("image") or ""
+
     results = [
         ("front matter parsed", bool(meta.get("title"))),
+        ("feed description present", bool(desc)),
+        ("feed description is XML-safe",
+         not re.search(r"&[a-zA-Z]+;|[&<>]", desc)),
+        ("feed image is a raster format",
+         img.lower().endswith((".png", ".jpg", ".jpeg", ".gif"))),
         (f"images rendered as <p><img ({src_images})",
          r.count("<p><img") == src_images and "<figure" not in r),
         (f"tables rendered ({src_tables})", r.count("<table") == src_tables),

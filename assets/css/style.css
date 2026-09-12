@@ -16,7 +16,7 @@
   --serif: Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
   --mono: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
 
-  --wide: 1200px;   /* figure / table breakout width */
+  --wide: 1200px;      /* page container width (.wrap) */
   --read: 680px;    /* reading measure, matches Medium */
   --figmax: 860px;   /* figure ceiling: wider than the text, inside the tables */
   --wide-table: 900px; /* opt-in breakout for sentence-heavy tables */
@@ -151,7 +151,13 @@ a.pill:hover { background: var(--line); color: var(--ink); }
    breakout to stay centred. The critical difference from the broken version
    is `width: auto`: max-width only permits a figure to be wider, it never
    forces one to be. A figure narrower than the column still renders at its
-   own size. */
+   own size.
+
+   The `figure` selectors below are deliberately kept even though no post
+   currently produces one. They are the styling path for a hand-written
+   <figure> in a post - a screenshot or photo that wants a real caption
+   element rather than the {: .caption} paragraph used for generated
+   diagrams. */
 .post-body figure {
   display: block;
   margin: 28px auto;
