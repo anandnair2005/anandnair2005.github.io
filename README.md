@@ -1,6 +1,6 @@
 # anandnair.dev
 
-Source for [anandnair.dev](https://anandnair.dev) – writing about AI and the
+Source for [anandnair.dev](https://anandnair.dev): writing about AI and the
 software systems underneath it. Built with Jekyll and served by GitHub Pages.
 
 Posts are also syndicated to
@@ -40,7 +40,7 @@ cd figures/<post-slug>
 python build_all.py
 ```
 
-Python 3, standard library only – no virtualenv, no dependencies.
+Python 3, standard library only. No virtualenv, no dependencies.
 
 PNG export is separate. It is needed only for Medium, which does not accept
 SVG, and it requires Playwright:

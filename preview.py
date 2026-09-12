@@ -390,6 +390,26 @@ def check(path):
     desc = meta.get("description") or ""
     img = meta.get("image") or ""
 
+    # Front matter is short, highly visible and easy to retype slightly wrong.
+    # A name miscapitalised there ("Nanochat" for "NanoChat") reaches search
+    # results and feed readers while the body stays correct, so compare the
+    # casing of each word against how the post itself spells it. The first
+    # word of a sentence is skipped: its capital is grammatical, not a name.
+    miscased = []
+    sentence_start = set()
+    for m in re.finditer(r"(?:^|[.!?]\s+)([A-Za-z]+)", desc):
+        sentence_start.add(m.group(1))
+    # Match bare words only. Including a possessive would produce "NanoChat's",
+    # which the body may never contain verbatim, so the comparison would find
+    # nothing to disagree with and the check would pass on corrupt input.
+    for word in re.findall(r"[A-Za-z]{4,}", desc):
+        if word in sentence_start or word in body:
+            continue
+        others = {m for m in re.findall(r"\b" + re.escape(word) + r"\b", body, re.I)
+                  if m != word}
+        if others:
+            miscased.append(f"{word} -> {sorted(others)[0]}")
+
     results = [
         ("front matter parsed", bool(meta.get("title"))),
         ("feed description present", bool(desc)),
@@ -397,6 +417,8 @@ def check(path):
          not re.search(r"&[a-zA-Z]+;|[&<>]", desc)),
         ("feed image is a raster format",
          img.lower().endswith((".png", ".jpg", ".jpeg", ".gif"))),
+        ("description casing matches the post"
+         + (f" ({miscased[0]})" if miscased else ""), not miscased),
         (f"images rendered as <p><img ({src_images})",
          r.count("<p><img") == src_images and "<figure" not in r),
         (f"tables rendered ({src_tables})", r.count("<table") == src_tables),
