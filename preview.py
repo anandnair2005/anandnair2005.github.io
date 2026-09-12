@@ -361,6 +361,23 @@ def check(path):
     # post it is run against instead of only the one it was written for.
     src_ial_ids = re.findall(r"^\{:\s*#([\w-]+)\}", body, re.M)
 
+    # The id each h2 should end up with: the IAL override when one follows the
+    # heading, otherwise whatever the renderer derives. Call slugify(inline())
+    # rather than restating the slug rule, so this cannot drift from render().
+    # Restating it inline gets two things wrong: entities such as &mdash; are
+    # not stripped, and an IAL override is ignored, which fails on any post
+    # with a hand-set heading id.
+    src_h2_ids = []
+    _body_lines = body.split("\n")
+    for _n, _line in enumerate(_body_lines):
+        _h = re.match(r"^##\s+(.*)$", _line)
+        if not _h:
+            continue
+        _after = _body_lines[_n + 1].strip() if _n + 1 < len(_body_lines) else ""
+        _override = re.match(r"^\{:\s*#([\w-]+)\}$", _after)
+        src_h2_ids.append(_override.group(1) if _override
+                          else slugify(inline(_h.group(1))))
+
     src_fences = len(re.findall(r"^```", body, re.M)) // 2
     src_quotes = len(re.findall(r"^>", body, re.M))
 
@@ -380,6 +397,13 @@ def check(path):
     fenced = "\n".join(re.findall(r"^```.*?^```", body, re.M | re.S))
     tex_in_fence = sorted(set(re.findall(r"\\(?:alpha|propto|sqrt|times|div)\b",
                                          fenced)))
+
+    # The h2 id check below calls the same slugify() that render() calls, so it
+    # can only prove the two agree, never that the rule itself is right. Pin the
+    # rule here with a fixed example: entities separate words rather than
+    # contributing letters, inline code contributes its text, and punctuation
+    # runs collapse to one hyphen.
+    slug_rule = slugify(inline("Appendix B &mdash; The `--depth` derivation"))
 
     # Paragraphs that open with an inline code span or an emphasised phrase.
     # Each of these has been broken by a one-character change to a
@@ -452,9 +476,10 @@ def check(path):
          src_caps == src_images),
         ("no IAL text leaked into output", "{:" not in r),
         (f"h2 headings ({src_h2})", len(re.findall(r"<h2 ", r)) == src_h2),
-        ("h2 headings carry ids",
-         all(f'<h2 id="{re.sub(r"[^a-z0-9]+", "-", m.lower()).strip("-")}"' in r
-             for m in re.findall(r"^## (.*?)$", body, re.M))),
+        ("h2 headings carry the right ids",
+         all(f'h2 id="{i}"' in r for i in src_h2_ids)),
+        (f"slug rule unchanged ({slug_rule})",
+         slug_rule == "appendix-b-the-depth-derivation"),
         (f"explicit ids from IAL ({len(src_ial_ids)})",
          all(f'id="{i}"' in r for i in src_ial_ids)),
         (f"code blocks ({src_fences})", r.count('<div class="highlight">') == src_fences),
