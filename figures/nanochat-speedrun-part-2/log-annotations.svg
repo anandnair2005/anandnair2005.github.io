@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="825" height="544" viewBox="0 0 660 435" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" role="img" aria-label="The opening lines of the training log, each printed value tied to the Part 1 expectation it settles. Four of them resolve before the first training step.">
+<rect width="660" height="435" fill="#333333"/>
+<text x="28" y="24" font-size="15" fill="#DDDDDD">Four expectations settle in <tspan fill="#F0AC5F" font-weight="600">31 lines</tspan> before step one</text>
+<text x="28.0" y="44.0" font-size="11" fill="#888888" text-anchor="start">speedrun.log lines 342 to 373, abridged</text>
+<rect x="22.0" y="63.0" width="616.0" height="22.0" rx="3" fill="#736357" opacity="0.1"/>
+<rect x="22.0" y="63.0" width="3.0" height="22.0" rx="1" fill="#736357"/>
+<text x="28.0" y="76.0" font-size="11" fill="#736357" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">342</text>
+<text x="72.0" y="76.0" font-size="13" fill="#DDDDDD" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">Using Flash Attention 3 (Hopper GPU detected)</text>
+<rect x="22.0" y="88.0" width="616.0" height="22.0" rx="3" fill="#58C4DD" opacity="0.1"/>
+<rect x="22.0" y="88.0" width="3.0" height="22.0" rx="1" fill="#58C4DD"/>
+<text x="28.0" y="101.0" font-size="11" fill="#736357" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">348</text>
+<text x="72.0" y="101.0" font-size="13" fill="#DDDDDD" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">  &quot;n_layer&quot;: 24,</text>
+<rect x="22.0" y="113.0" width="616.0" height="22.0" rx="3" fill="#58C4DD" opacity="0.1"/>
+<rect x="22.0" y="113.0" width="3.0" height="22.0" rx="1" fill="#58C4DD"/>
+<text x="28.0" y="126.0" font-size="11" fill="#736357" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">349</text>
+<text x="72.0" y="126.0" font-size="13" fill="#DDDDDD" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">  &quot;n_head&quot;: 12,</text>
+<rect x="22.0" y="138.0" width="616.0" height="22.0" rx="3" fill="#58C4DD" opacity="0.1"/>
+<rect x="22.0" y="138.0" width="3.0" height="22.0" rx="1" fill="#58C4DD"/>
+<text x="28.0" y="151.0" font-size="11" fill="#736357" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">351</text>
+<text x="72.0" y="151.0" font-size="13" fill="#DDDDDD" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">  &quot;n_embd&quot;: 1536,</text>
+<rect x="22.0" y="163.0" width="616.0" height="22.0" rx="3" fill="#9A72AC" opacity="0.1"/>
+<rect x="22.0" y="163.0" width="3.0" height="22.0" rx="1" fill="#9A72AC"/>
+<text x="28.0" y="176.0" font-size="11" fill="#736357" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">354</text>
+<text x="72.0" y="176.0" font-size="13" fill="#DDDDDD" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">converted 145/158 linear layers, skipped 13 (too small)</text>
+<rect x="22.0" y="188.0" width="616.0" height="22.0" rx="3" fill="#58C4DD" opacity="0.1"/>
+<rect x="22.0" y="188.0" width="3.0" height="22.0" rx="1" fill="#58C4DD"/>
+<text x="28.0" y="201.0" font-size="11" fill="#736357" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">363</text>
+<text x="72.0" y="201.0" font-size="13" fill="#DDDDDD" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">Auto-computed optimal batch size: 1,048,576 tokens</text>
+<rect x="22.0" y="213.0" width="616.0" height="22.0" rx="3" fill="#58C4DD" opacity="0.1"/>
+<rect x="22.0" y="213.0" width="3.0" height="22.0" rx="1" fill="#58C4DD"/>
+<text x="28.0" y="226.0" font-size="11" fill="#736357" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">367</text>
+<text x="72.0" y="226.0" font-size="13" fill="#DDDDDD" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">Calculated number of iterations ... ratio: 5,568</text>
+<rect x="22.0" y="238.0" width="616.0" height="22.0" rx="3" fill="#F0AC5F" opacity="0.1"/>
+<rect x="22.0" y="238.0" width="3.0" height="22.0" rx="1" fill="#F0AC5F"/>
+<text x="28.0" y="251.0" font-size="11" fill="#736357" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">368</text>
+<text x="72.0" y="251.0" font-size="13" fill="#DDDDDD" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">Total number of training tokens: 5,838,471,168</text>
+<rect x="22.0" y="263.0" width="616.0" height="22.0" rx="3" fill="#5CD0B3" opacity="0.1"/>
+<rect x="22.0" y="263.0" width="3.0" height="22.0" rx="1" fill="#5CD0B3"/>
+<text x="28.0" y="276.0" font-size="11" fill="#736357" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">373</text>
+<text x="72.0" y="276.0" font-size="13" fill="#DDDDDD" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">Total batch size 1,048,576 =&gt; gradient accum steps: 8</text>
+<line x1="28.0" y1="313.0" x2="632.0" y2="313.0" stroke="#736357" stroke-width="1" opacity="0.4"/>
+<rect x="28.0" y="317.0" width="9.0" height="9.0" rx="2" fill="#58C4DD"/>
+<text x="45.0" y="325.0" font-size="11" fill="#58C4DD" text-anchor="start" font-weight="600">Expectation 1</text>
+<text x="132.0" y="325.0" font-size="11" fill="#888888" text-anchor="start">depth 24 sets every other dimension</text>
+<rect x="28.0" y="336.0" width="9.0" height="9.0" rx="2" fill="#5CD0B3"/>
+<text x="45.0" y="344.0" font-size="11" fill="#5CD0B3" text-anchor="start" font-weight="600">Expectation 2</text>
+<text x="132.0" y="344.0" font-size="11" fill="#888888" text-anchor="start">world size changes accumulation, nothing else</text>
+<rect x="28.0" y="355.0" width="9.0" height="9.0" rx="2" fill="#9A72AC"/>
+<text x="45.0" y="363.0" font-size="11" fill="#9A72AC" text-anchor="start" font-weight="600">Expectation 3</text>
+<text x="132.0" y="363.0" font-size="11" fill="#888888" text-anchor="start">FP8 is applied selectively</text>
+<rect x="28.0" y="374.0" width="9.0" height="9.0" rx="2" fill="#F0AC5F"/>
+<text x="45.0" y="382.0" font-size="11" fill="#F0AC5F" text-anchor="start" font-weight="600">Expectation 4</text>
+<text x="132.0" y="382.0" font-size="11" fill="#888888" text-anchor="start">the token budget is exact, not rounded</text>
+<rect x="28.0" y="393.0" width="9.0" height="9.0" rx="2" fill="#736357"/>
+<text x="45.0" y="401.0" font-size="11" fill="#736357" text-anchor="start" font-weight="600">Expectation 6</text>
+<text x="132.0" y="401.0" font-size="11" fill="#888888" text-anchor="start">FA3 is detected, not assumed</text>
+<text x="28.0" y="423.0" font-size="11" fill="#736357" text-anchor="start">5,568 x 1,048,576 = 5,838,471,168 tokens exactly. No remainder, no padding, no truncated final batch.</text>
+</svg>

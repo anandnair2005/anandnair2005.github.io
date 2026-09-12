@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="825" height="468" viewBox="0 0 660 374" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" role="img" aria-label="The orchestration: a local driver, an ephemeral rented host that does the compute, and cloud storage as the durable layer. Results are synced off the host continuously.">
+<rect width="660" height="374" fill="#333333"/>
+<text x="28" y="24" font-size="15" fill="#DDDDDD">Only the middle column is <tspan fill="#FC6255" font-weight="600">disposable</tspan></text>
+<text x="28.0" y="44.0" font-size="11" fill="#888888" text-anchor="start">so results have to leave it while the run is still going</text>
+<rect x="28.0" y="92.0" width="176.0" height="150.0" rx="6" fill="#58C4DD" opacity="0.12"/>
+<text x="40.0" y="114.0" font-size="13" fill="#58C4DD" text-anchor="start" font-weight="600">Local machine</text>
+<text x="40.0" y="130.0" font-size="11" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">orchestrator</text>
+<rect x="40.0" y="147.0" width="5.0" height="5.0" rx="1" fill="#58C4DD"/>
+<text x="52.0" y="154.0" font-size="11" fill="#DDDDDD" text-anchor="start">scripted launch</text>
+<rect x="40.0" y="166.0" width="5.0" height="5.0" rx="1" fill="#58C4DD"/>
+<text x="52.0" y="173.0" font-size="11" fill="#DDDDDD" text-anchor="start">config and secrets</text>
+<rect x="40.0" y="185.0" width="5.0" height="5.0" rx="1" fill="#58C4DD"/>
+<text x="52.0" y="192.0" font-size="11" fill="#DDDDDD" text-anchor="start">log tailing</text>
+<text x="116.0" y="260.0" font-size="11" fill="#888888" text-anchor="middle">persistent</text>
+<rect x="242.0" y="92.0" width="176.0" height="150.0" rx="6" fill="#F0AC5F" opacity="0.12" stroke="#F0AC5F" stroke-width="1.5"/>
+<rect x="242.0" y="92" width="176" height="150" rx="6" fill="none" stroke="#FC6255" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="254.0" y="114.0" font-size="13" fill="#F0AC5F" text-anchor="start" font-weight="600">Vast.ai host</text>
+<text x="254.0" y="130.0" font-size="11" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">4 x H100</text>
+<rect x="254.0" y="147.0" width="5.0" height="5.0" rx="1" fill="#F0AC5F"/>
+<text x="266.0" y="154.0" font-size="11" fill="#DDDDDD" text-anchor="start">tokenizer</text>
+<rect x="254.0" y="166.0" width="5.0" height="5.0" rx="1" fill="#F0AC5F"/>
+<text x="266.0" y="173.0" font-size="11" fill="#DDDDDD" text-anchor="start">base pretrain</text>
+<rect x="254.0" y="185.0" width="5.0" height="5.0" rx="1" fill="#F0AC5F"/>
+<text x="266.0" y="192.0" font-size="11" fill="#DDDDDD" text-anchor="start">SFT</text>
+<rect x="254.0" y="204.0" width="5.0" height="5.0" rx="1" fill="#F0AC5F"/>
+<text x="266.0" y="211.0" font-size="11" fill="#DDDDDD" text-anchor="start">evaluations</text>
+<text x="330.0" y="260.0" font-size="11" fill="#FC6255" text-anchor="middle">vanishes on exit</text>
+<rect x="456.0" y="92.0" width="176.0" height="150.0" rx="6" fill="#5CD0B3" opacity="0.12"/>
+<text x="468.0" y="114.0" font-size="13" fill="#5CD0B3" text-anchor="start" font-weight="600">Google Drive</text>
+<text x="468.0" y="130.0" font-size="11" fill="#888888" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">durable store</text>
+<rect x="468.0" y="147.0" width="5.0" height="5.0" rx="1" fill="#5CD0B3"/>
+<text x="480.0" y="154.0" font-size="11" fill="#DDDDDD" text-anchor="start">checkpoints, 9.3 GiB</text>
+<rect x="468.0" y="166.0" width="5.0" height="5.0" rx="1" fill="#5CD0B3"/>
+<text x="480.0" y="173.0" font-size="11" fill="#DDDDDD" text-anchor="start">speedrun.log</text>
+<rect x="468.0" y="185.0" width="5.0" height="5.0" rx="1" fill="#5CD0B3"/>
+<text x="480.0" y="192.0" font-size="11" fill="#DDDDDD" text-anchor="start">eval reports</text>
+<text x="544.0" y="260.0" font-size="11" fill="#888888" text-anchor="middle">persistent</text>
+<line x1="208.0" y1="138.0" x2="231.0" y2="138.0" stroke="#58C4DD" stroke-width="1.4"/>
+<polygon points="238.0,138.0 231.0,134.2 231.0,141.8" fill="#58C4DD"/>
+<text x="223.0" y="129.0" font-size="11" fill="#58C4DD" text-anchor="middle">launch</text>
+<line x1="452.0" y1="200.0" x2="429.0" y2="200.0" stroke="#5CD0B3" stroke-width="1.4"/>
+<polygon points="422.0,200.0 429.0,203.8 429.0,196.2" fill="#5CD0B3"/>
+<text x="437.0" y="191.0" font-size="11" fill="#5CD0B3" text-anchor="middle">restore</text>
+<text x="437.0" y="214.0" font-size="11" fill="#888888" text-anchor="middle">once, small</text>
+<line x1="422.0" y1="138.0" x2="445.0" y2="138.0" stroke="#F0AC5F" stroke-width="2.4"/>
+<polygon points="452.0,138.0 445.0,134.2 445.0,141.8" fill="#F0AC5F"/>
+<text x="437.0" y="129.0" font-size="11" fill="#F0AC5F" text-anchor="middle" font-weight="600">sync</text>
+<text x="437.0" y="152.0" font-size="11" fill="#F0AC5F" text-anchor="middle">continuous, everything</text>
+<line x1="28.0" y1="326.0" x2="632.0" y2="326.0" stroke="#736357" stroke-width="1" opacity="0.4"/>
+<text x="28.0" y="340.0" font-size="11" fill="#736357" text-anchor="start">One run: 4h 36m wall clock, $41.16 of rented time.</text>
+<text x="28.0" y="356.0" font-size="11" fill="#888888" text-anchor="start">A host lost mid-run costs the hours since the last sync, not the run.</text>
+</svg>

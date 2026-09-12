@@ -356,6 +356,11 @@ def check(path):
     src_caps = len(re.findall(r"^\s*\{:\s*\.caption\}", body, re.M))
 
     src_h2 = len(re.findall(r"^## ", body, re.M))
+    # Explicit ids set by an IAL on the preceding heading, e.g. "{: #appendix-a}".
+    # Derived from the post rather than hard-coded, so the check follows whichever
+    # post it is run against instead of only the one it was written for.
+    src_ial_ids = re.findall(r"^\{:\s*#([\w-]+)\}", body, re.M)
+
     src_fences = len(re.findall(r"^```", body, re.M)) // 2
     src_quotes = len(re.findall(r"^>", body, re.M))
 
@@ -430,9 +435,11 @@ def check(path):
          src_caps == src_images),
         ("no IAL text leaked into output", "{:" not in r),
         (f"h2 headings ({src_h2})", len(re.findall(r"<h2 ", r)) == src_h2),
-        ("h2 headings carry ids", all(
-            'id="' in m for m in re.findall(r"<h2[^>]*>", r))),
-        ("appendix ids from IAL", 'id="appendix-a"' in r and 'id="appendix-b"' in r),
+        ("h2 headings carry ids",
+         all(f'<h2 id="{re.sub(r"[^a-z0-9]+", "-", m.lower()).strip("-")}"' in r
+             for m in re.findall(r"^## (.*?)$", body, re.M))),
+        (f"explicit ids from IAL ({len(src_ial_ids)})",
+         all(f'id="{i}"' in r for i in src_ial_ids)),
         (f"code blocks ({src_fences})", r.count('<div class="highlight">') == src_fences),
         ("blockquotes rendered", src_quotes == 0 or "<blockquote" in r),
         ("code spans rendered", "<code>" in r),
