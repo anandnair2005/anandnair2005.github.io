@@ -128,5 +128,5 @@ if __name__ == "__main__":
     n = check()
     path, size = build().save("mfu-stability.svg")
     print(f"  mfu-stability.svg   {size/1024:5.1f} KB    ")
-    print(f"  {n:} steps binned, mean {MEAN}, stdev {STDEV} ")
+    print(f"  {n:,} steps binned, mean {MEAN}, stdev {STDEV} ")
     print(f"  -- asserted against the run log")

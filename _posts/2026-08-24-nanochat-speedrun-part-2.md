@@ -80,7 +80,7 @@ Expectation 5, settled. The Hopper gate worked exactly as the import chain said 
 "n_layer": 24, "n_head": 12, "n_embd": 1536, "window_pattern": "SSSL"
 Auto-computed optimal batch size: 1,048,576 tokens
 Scaling LRs by 1.4142 for batch size 1,048,576 (reference: 524,288)
-Scaling the LR for the AdamW parameters \alpha1/\sqrt(1536/768) = 0.707107
+Scaling the LR for the AdamW parameters ∝1/√(1536/768) = 0.707107
 Calculated number of iterations from target data:param ratio: 5,568
 Total number of training tokens: 5,838,471,168
 ```
@@ -105,7 +105,7 @@ Expectation 2 was that running on four GPUs instead of the reference eight would
 ✓ FP8 training enabled (tensorwise scaling) - converted 145/158 linear layers, skipped 13 (too small)
 ```
 
-This is the one I had been most pleased with in Part 1, and the one I was most nervous about. I had counted the linear layers by hand from the module definitions, applied the eligibility filter from `fp8.py`, and predicted 145 conversions and 13 skips &mdash; twelve `ve_gate` projections at `Linear(12, 12)`, where 12 is not divisible by 16, plus one `smear_gate` at `Linear(24, 1)`:
+This is the one I had been most pleased with in Part 1, and the one I was most nervous about. I had counted the linear layers by hand from the module definitions, applied the eligibility filter from `fp8.py`, and predicted 145 conversions and 13 skips &mdash; twelve `ve_gate` projections at `Linear(12, 12)`, where 12 is not divisible by 16, plus one `smear_gate` at `Linear(24, 1)`.
 
 The log prints `145/158` and `13`. Expectation 3, exactly.
 
@@ -192,7 +192,7 @@ This one has a proof rather than a measurement, and it is my favourite thing in 
 The run reports 5,568 iterations and a global batch of 1,048,576 tokens. It separately reports the total tokens trained as 5,838,471,168.
 
 ```text
-5,568 \times 1,048,576 = 5,838,471,168
+5,568 × 1,048,576 = 5,838,471,168
 ```
 
 Exactly. No remainder, no rounding, no discrepancy of a few thousand tokens that would indicate a padded final row or a dropped partial batch. Every token counted in the total is a real token that contributed to a gradient.
@@ -311,8 +311,8 @@ The model it produced is small and often wrong. The engineering that produced it
 
 ## Notes and sources
 
-- Run: `d24-4xh100-full`, 4&times; NVIDIA H100 80GB HBM3, 11 July 2026. The report and the full `speedrun.log` are in my fork, under [blog/evidence/part-1](https://github.com/anandnair2005/nanochat/tree/be4e002e8e44dbd8c34ce7d38ec63fa19ad496/blog/evidence/part-1).
+- Run: `d24-4xh100-full`, 4&times; NVIDIA H100 80GB HBM3, 11 July 2026. The report and the full `speedrun.log` are in my fork, under [blog/evidence/part-1](https://github.com/anandnair2005/nanochat/tree/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/blog/evidence/part-1).
 - MFU statistics computed from all 5,568 base-training step lines in `speedrun.log`. Step 0 excluded from steady-state figures, as stated above.
 - GPU telemetry is sampled by Weights &amp; Biases through NVML, outside the training loop. It is not something NanoChat logs.
 - Reference comparison figures (1.65 h, CORE 0.2626) are from NanoChat's own README leaderboard row, not a run of mine.
-- Andrej Karpathy, [NanoChat](https://github.com/karpathy/nanochat/tree/be4e002e8e44dbd8c34ce7d38ec63fa19ad496).
+- Andrej Karpathy, [NanoChat](https://github.com/karpathy/nanochat/tree/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496).

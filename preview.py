@@ -364,6 +364,23 @@ def check(path):
     src_fences = len(re.findall(r"^```", body, re.M)) // 2
     src_quotes = len(re.findall(r"^>", body, re.M))
 
+    # Corruptions that a transcription round trip has actually introduced, and
+    # that nothing else here would notice.
+    #
+    # Git SHAs: a dropped character still looks like a plausible hash, still
+    # reads correctly in prose, and 404s. Check the length of every hex run
+    # that appears after /tree/ or /blob/ rather than hard-coding one hash.
+    sha_bad = [s for s in re.findall(r"/(?:tree|blob)/([0-9a-f]{7,})", body)
+               if len(s) != 40]
+
+    # Maths glyphs inside fenced blocks: these quote a log verbatim, so a
+    # helpful transliteration to \alpha or \times is wrong twice over. It
+    # changes quoted output, and U+221D PROPORTIONAL TO is not alpha. Entities
+    # are no defence here: kramdown does not decode them inside a fence.
+    fenced = "\n".join(re.findall(r"^```.*?^```", body, re.M | re.S))
+    tex_in_fence = sorted(set(re.findall(r"\\(?:alpha|propto|sqrt|times|div)\b",
+                                         fenced)))
+
     # Paragraphs that open with an inline code span or an emphasised phrase.
     # Each of these has been broken by a one-character change to a
     # block-detection regex, and none shows up in a simple count, so compare
@@ -451,6 +468,8 @@ def check(path):
         ("entities left for the browser",
          "&mdash;" in r or "\u2014" in r),
         ("no paragraph truncated at an inline marker", not truncated),
+        (f"git tree/blob hashes are full length" + (f" ({sha_bad[0]})" if sha_bad else ""), not sha_bad),
+        (f"no transliterated tex inside code fences" + (f" ({tex_in_fence[0]})" if tex_in_fence else ""), not tex_in_fence),
     ]
 
     width = max(len(n) for n, _ in results)
