@@ -3,6 +3,7 @@ Render a post to a standalone HTML preview, for checking layout locally.
 
     python preview.py                     # newest post
     python preview.py _posts/2026-08-10-nanochat-speedrun-part-1.md
+    python preview.py --check             # verify the renderer still works
 
 Writes preview-<slug>.html next to this script. Needs Python 3 and nothing
 else. The output is gitignored: it is a throwaway view, never a source.
@@ -210,7 +211,7 @@ def render(body):
         # paragraph
         buf = []
         while i < len(lines) and lines[i].strip() and not re.match(
-                r"^\s*(\||>|#{1,6}\s|```|`|\{:|[-*]\s+|\d+\.\s+)", lines[i]):
+                r"^\s*(\||>|#{1,6}\s|```|\{:|[-*]\s+|\d+\.\s+)", lines[i]):
             buf.append(lines[i].strip())
             i += 1
         if buf:
@@ -336,15 +337,98 @@ def build(path):
         fh.write(page)
     return out, rendered
 
+# ----------------------------------------------------------------------------- self-check
+
+def check(path):
+    """Assert the renderer still behaves, and report what failed.
+
+    This file is edited by hand and has twice come back from a round trip with
+    its indentation shifted, which silently disables whole block handlers. Each
+    assertion below corresponds to a way it has actually broken, so run this
+    after any change you did not make yourself.
+    """
+    with open(path, encoding="utf-8") as fh:
+        meta, body = split_front_matter(fh.read())
+    r = render(body)
+
+    src_images = len(re.findall(r"^!\[", body, re.M))
+    src_tables = len(re.findall(r"^\{:\s*\.wide\}", body, re.M))
+    src_h2 = len(re.findall(r"^## ", body, re.M))
+    src_fences = len(re.findall(r"^```", body, re.M)) // 2
+    src_quotes = len(re.findall(r"^>", body, re.M))
+
+    # Paragraphs that open with an inline code span or an emphasised phrase.
+    # Each of these has been broken by a one-character change to a
+    # block-detection regex, and none shows up in a simple count, so compare
+    # the rendered text against the source line instead. List items are
+    # excluded: they are block-level and legitimately render as <li>.
+    def first_words(line):
+        plain = re.sub(r"\[([^\]]*)\]\(([^)]*)\)", r"\1", line)
+        plain = re.sub(r"[`*_]", "", plain)
+        return " ".join(plain.split()[:6])
+
+    plain_render = re.sub(r"<[^>]+>", "", r)
+    truncated = []
+    in_fence = False
+    for line in body.splitlines():
+        if line.strip().startswith("```"):
+            in_fence = not in_fence
+            continue
+        if in_fence or len(line.split()) < 8:
+            continue
+        if re.match(r"^\s*(`|\*\*)", line):
+            head = first_words(line)
+            if head and head not in plain_render:
+                truncated.append(head)
+
+    results = [
+        ("front matter parsed", bool(meta.get("title"))),
+        (f"images rendered as <p><img ({src_images})",
+         r.count("<p><img") == src_images and "<figure" not in r),
+        (f"tables rendered ({src_tables})", r.count("<table") == src_tables),
+        (f"table .wide class applied ({src_tables})",
+         r.count('<table class="wide"') == src_tables),
+        (f"h2 headings ({src_h2})", len(re.findall(r"<h2 ", r)) == src_h2),
+        ("h2 headings carry ids", all(
+            'id="' in m for m in re.findall(r"<h2[^>]*>", r))),
+        ("appendix ids from IAL", 'id="appendix-a"' in r and 'id="appendix-b"' in r),
+        (f"code blocks ({src_fences})", r.count('<div class="highlight">') == src_fences),
+        ("blockquotes rendered", src_quotes == 0 or "<blockquote" in r),
+        ("code spans rendered", "<code>" in r),
+        ("links rendered", '<a href="http' in r),
+        ("bold rendered", "<strong>" in r),
+        ("no unclosed paragraphs", r.count("<p>") == r.count("</p>")),
+        ("no raw markdown leaked", not re.search(r"^\s*\|", r, re.M)),
+        ("entities left for the browser",
+         "&mdash;" in r or "\u2014" in r),
+        ("no paragraph truncated at an inline marker", not truncated),
+    ]
+
+    width = max(len(n) for n, _ in results)
+    bad = 0
+    for name, ok in results:
+        if not ok:
+            bad += 1
+        print(f"  {'PASS' if ok else 'FAIL'}  {name:{width}s}")
+    print(f"\n  {len(results) - bad}/{len(results)} checks passed")
+    return bad
+
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        target = sys.argv[1]
+    args = [a for a in sys.argv[1:] if not a.startswith("-")]
+    flags = {a for a in sys.argv[1:] if a.startswith("-")}
+
+    if args:
+        target = args[0]
     else:
         posts = sorted(f for f in os.listdir(POSTS) if f.endswith(".md"))
         if not posts:
             sys.exit("no posts found in _posts/")
         target = os.path.join(POSTS, posts[-1])
+
+    if "--check" in flags:
+        print(f"  checking against {os.path.basename(target)}\n")
+        raise SystemExit(1 if check(target) else 0)
 
     out, rendered = build(target)
     print(f"  {os.path.basename(target)}")
