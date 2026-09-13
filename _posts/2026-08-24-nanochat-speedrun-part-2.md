@@ -11,7 +11,7 @@ image: /figures/nanochat-speedrun-part-2/png/mfu-stability.png
 
 > **Disclosure:** I used AI assistance to edit and refine this post, but the ideas, interpretations, and conclusions are mine.
 
-[Part 1]({{ '/posts/nanochat-speedrun-part-1/' | relative_url }}) ended with a table of eight things I expected to see. I had not rented a GPU at that point. The whole list came out of reading [NanoChat](https://github.com/karpathy/nanochat/tree/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496) and working through the arithmetic on paper.
+[Part 1]({{ '/posts/nanochat-speedrun-part-1/' | relative_url }}) ended with a table of eight things I expected to see. I had not rented a GPU at that point. The whole list came out of reading [NanoChat](https://github.com/anandnair2005/nanochat/tree/254e524e2df052abe1048ab277a862ad005bc46a) and working through the arithmetic on paper.
 
 This post is what happened when I ran it.
 
@@ -311,8 +311,8 @@ The model it produced is small and often wrong. The engineering that produced it
 
 ## Notes and sources
 
-- Run: `d24-4xh100-full`, 4&times; NVIDIA H100 80GB HBM3, 11 July 2026. The report and the full `speedrun.log` are in my fork, under [blog/evidence/part-1](https://github.com/anandnair2005/nanochat/tree/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/blog/evidence/part-1).
+- Run: `d24-4xh100-full`, 4&times; NVIDIA H100 80GB HBM3, 11 July 2026. The report and the full `speedrun.log` are in my fork, under [blog/evidence/part-1](https://github.com/anandnair2005/nanochat/tree/254e524e2df052abe1048ab277a862ad005bc46a/blog/evidence/part-1).
 - MFU statistics computed from all 5,568 base-training step lines in `speedrun.log`. Step 0 excluded from steady-state figures, as stated above.
 - GPU telemetry is sampled by Weights &amp; Biases through NVML, outside the training loop. It is not something NanoChat logs.
 - Reference comparison figures (1.65 h, CORE 0.2626) are from NanoChat's own README leaderboard row, not a run of mine.
-- Andrej Karpathy, [NanoChat](https://github.com/karpathy/nanochat/tree/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496).
+- Andrej Karpathy, [NanoChat](https://github.com/karpathy/nanochat).

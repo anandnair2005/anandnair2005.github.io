@@ -11,11 +11,11 @@ image: /figures/nanochat-speedrun-part-1/png/sssl-window.png
 
 > **Disclosure:** I used AI assistance to edit and refine this post, but the ideas, interpretations, and conclusions are mine.
 
-> **Read the repo alongside this.** Everything below is a close reading of a specific codebase, and it will land far better if you have [NanoChat](https://github.com/karpathy/nanochat/tree/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496) open in another window. It is small enough to skim in an evening. Every claim here links to the exact file and line it came from &mdash; follow a few of them, and disagree with me where you find something I misread.
+> **Read the repo alongside this.** Everything below is a close reading of a specific codebase, and it will land far better if you have [NanoChat](https://github.com/anandnair2005/nanochat/tree/254e524e2df052abe1048ab277a862ad005bc46a) open in another window. It is small enough to skim in an evening. Every claim here links to the exact file and line it came from &mdash; follow a few of them, and disagree with me where you find something I misread.
 
 I have read a lot about transformers. Books, papers, tutorial series, the usual conference talks. Before this I would have told you I understood how they were trained.
 
-Then in early 2026 I sat down with Andrej Karpathy's [NanoChat](https://github.com/karpathy/nanochat/tree/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496) and read it properly &mdash; not skimmed, read &mdash; and learned more in a fortnight than I had from any of it. Not because the code is clever in a way that shows off. Because it is simple in a way that clearly took enormous effort to arrive at, and because almost every line turns out to be load-bearing once you ask why it is there.
+Then in early 2026 I sat down with Andrej Karpathy's [NanoChat](https://github.com/karpathy/nanochat) and read it properly &mdash; not skimmed, read &mdash; and learned more in a fortnight than I had from any of it. Not because the code is clever in a way that shows off. Because it is simple in a way that clearly took enormous effort to arrive at, and because almost every line turns out to be load-bearing once you ask why it is there.
 
 NanoChat describes itself as a simple experimental harness for training LLMs on a single GPU node: tokenization, pretraining, fine-tuning, evaluation, inference, and a chat UI. It is small enough that a motivated reader can hold the whole thing in their head. That is the trick, and it is not an accident.
 
@@ -29,13 +29,13 @@ One note on lineage: NanoChat's README credits [`modded-nanogpt`](https://github
 
 ## The shape of the repo
 
-The executable spine is [`runs/speedrun.sh`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/runs/speedrun.sh), and it is refreshingly literal. In order: set up the Python environment with `uv`, download data, train and evaluate the tokenizer, run base pretraining under `torchrun`, run base evaluation, download identity conversations, run SFT, run chat evaluation, generate the report.
+The executable spine is [`runs/speedrun.sh`](https://github.com/anandnair2005/nanochat/blob/254e524e2df052abe1048ab277a862ad005bc46a/runs/speedrun.sh), and it is refreshingly literal. In order: set up the Python environment with `uv`, download data, train and evaluate the tokenizer, run base pretraining under `torchrun`, run base evaluation, download identity conversations, run SFT, run chat evaluation, generate the report.
 
 You can read the project's entire intent off that one file. There is no orchestration framework, no config hierarchy, no plugin system. The pipeline is a shell script because a shell script is sufficient.
 
 That has a consequence worth stating early: the wall-clock time and the final bill do not measure raw pretraining throughput. They measure the cost of producing a usable artifact and a report about it. Those are different numbers, and the second one is the honest one.
 
-One scope note. The reference speedrun path runs SFT and chat evaluation but not RL. NanoChat does ship [`scripts/chat_rl.py`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/scripts/chat_rl.py), but it sits outside the path I followed.
+One scope note. The reference speedrun path runs SFT and chat evaluation but not RL. NanoChat does ship [`scripts/chat_rl.py`](https://github.com/anandnair2005/nanochat/blob/254e524e2df052abe1048ab277a862ad005bc46a/scripts/chat_rl.py), but it sits outside the path I followed.
 
 ![The whole project on one page](/figures/nanochat-speedrun-part-1/repo-map.svg)
 
@@ -48,9 +48,9 @@ One scope note. The reference speedrun path runs SFT and chat evaluation but not
 
 Here is the design choice that made me pay attention.
 
-NanoChat does not ask you to tune anything to get started. The README describes a single complexity dial &mdash; the depth of the transformer &mdash; and [`scripts/base_train.py`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/scripts/base_train.py) means it literally. From `--depth`, the script derives model width, attention head count, parameter count, training horizon, global batch size, learning-rate scaling, and weight decay.
+NanoChat does not ask you to tune anything to get started. The README describes a single complexity dial &mdash; the depth of the transformer &mdash; and [`scripts/base_train.py`](https://github.com/anandnair2005/nanochat/blob/254e524e2df052abe1048ab277a862ad005bc46a/scripts/base_train.py) means it literally. From `--depth`, the script derives model width, attention head count, parameter count, training horizon, global batch size, learning-rate scaling, and weight decay.
 
-The mechanism is a reference model. The `d12` configuration is treated as an empirically measured anchor: its compute-optimal token horizon and batch size come from NanoChat's own sweeps, recorded in [`dev/LOG.md`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/dev/LOG.md). Every other depth is extrapolated from that anchor using scaling-law relationships plus a few hardware constraints.
+The mechanism is a reference model. The `d12` configuration is treated as an empirically measured anchor: its compute-optimal token horizon and batch size come from NanoChat's own sweeps, recorded in [`dev/LOG.md`](https://github.com/anandnair2005/nanochat/blob/254e524e2df052abe1048ab277a862ad005bc46a/dev/LOG.md). Every other depth is extrapolated from that anchor using scaling-law relationships plus a few hardware constraints.
 
 The chain runs like this:
 
@@ -84,7 +84,7 @@ I reproduced this derivation by hand for depth 24 before running anything, which
 
 ## The model it builds
 
-The model in [`nanochat/gpt.py`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/nanochat/gpt.py) is a compact GPT-style transformer, and I am going to assume you know what that means. Rotary embeddings, RMSNorm, QK normalization, ReLU-squared MLPs, no biases, untied input and output embeddings. Individually, each of these is a choice you can find justified in a paper somewhere.
+The model in [`nanochat/gpt.py`](https://github.com/anandnair2005/nanochat/blob/254e524e2df052abe1048ab277a862ad005bc46a/nanochat/gpt.py) is a compact GPT-style transformer, and I am going to assume you know what that means. Rotary embeddings, RMSNorm, QK normalization, ReLU-squared MLPs, no biases, untied input and output embeddings. Individually, each of these is a choice you can find justified in a paper somewhere.
 
 More interesting is the overall shape of the forward pass:
 
@@ -117,7 +117,7 @@ Eighteen of twenty-four layers never look further back than a quarter of the seq
 
 A final safety line, `window_sizes[-1] = (long_window, 0)`, forces the last layer to full context whatever the pattern says. For `SSSL` at depth 24 it changes nothing &mdash; layer 23 is already `L`. It only bites on a pattern ending in `S`.
 
-This is also the one place I found where the repository contradicts itself. The `--window-pattern` help text in [`base_train.py`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/scripts/base_train.py#L54) describes `S` as "half context", and the inline comment on the line above says `2048 -> 768`. The arithmetic gives 512, a quarter. The docstring one line further up says "quarter context" and is correct.
+This is also the one place I found where the repository contradicts itself. The `--window-pattern` help text in [`base_train.py`](https://github.com/anandnair2005/nanochat/blob/254e524e2df052abe1048ab277a862ad005bc46a/scripts/base_train.py#L54) describes `S` as "half context", and the inline comment on the line above says `2048 -> 768`. The arithmetic gives 512, a quarter. The docstring one line further up says "quarter context" and is correct.
 
 The code is right and the comment is stale. In a repository built this carefully, that was genuinely the only inconsistency I found worth reporting &mdash; and it is a comment, not behaviour. Trust the arithmetic.
 
@@ -168,7 +168,7 @@ So GPU count becomes an execution detail rather than a hyperparameter. Run the s
 
 ### Attention: FA3, and only on Hopper
 
-[`nanochat/flash_attention.py`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/nanochat/flash_attention.py) tries to load Flash Attention 3, but only on Hopper-class GPUs, and falls back to PyTorch's SDPA everywhere else behind an API-compatible shim.
+[`nanochat/flash_attention.py`](https://github.com/anandnair2005/nanochat/blob/254e524e2df052abe1048ab277a862ad005bc46a/nanochat/flash_attention.py) tries to load Flash Attention 3, but only on Hopper-class GPUs, and falls back to PyTorch's SDPA everywhere else behind an API-compatible shim.
 
 What I like is the honesty of the fallback. It is not sold as equivalent. The training script warns that it is meaningfully less efficient, and warns harder if you combine it with sliding windows &mdash; a sliding-window mask through the generic path is expensive exactly where FA3 would be cheap. If you are not on Hopper, the advice is to stop pretending and use `--window-pattern=L`. Hardware-specific paths are labelled as such rather than hidden behind an abstraction that silently underperforms.
 
@@ -178,7 +178,7 @@ What I like is the honesty of the fallback. It is not sold as equivalent. The tr
 
 FP8 is where I expected to find hand-waving, and did not.
 
-[`base_train.py`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/scripts/base_train.py#L166-L193) exposes `--fp8`, and on CUDA it walks the model converting eligible `nn.Linear` modules. [`nanochat/fp8.py`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/nanochat/fp8.py) is deliberately small: tensorwise dynamic scaling, quantize, `torch._scaled_mm`, dequantize. Weights use `float8_e4m3fn`, gradients `float8_e5m2` &mdash; trading mantissa bits for range, because gradients need the range more.
+[`base_train.py`](https://github.com/anandnair2005/nanochat/blob/254e524e2df052abe1048ab277a862ad005bc46a/scripts/base_train.py#L166-L193) exposes `--fp8`, and on CUDA it walks the model converting eligible `nn.Linear` modules. [`nanochat/fp8.py`](https://github.com/anandnair2005/nanochat/blob/254e524e2df052abe1048ab277a862ad005bc46a/nanochat/fp8.py) is deliberately small: tensorwise dynamic scaling, quantize, `torch._scaled_mm`, dequantize. Weights use `float8_e4m3fn`, gradients `float8_e5m2` &mdash; trading mantissa bits for range, because gradients need the range more.
 
 The interesting word is *eligible*. The filter skips layers whose dimensions are not divisible by 16, and skips very small layers entirely. Neither rule is arbitrary: FP8 tensor-core paths have alignment requirements, and for a tiny matrix the quantize/dequantize overhead costs more than the faster multiply saves. `dev/LOG.md` adds that tensorwise scaling beat rowwise at this scale, and that the filtering was needed for stability. This is not a switch flipped because it was available.
 
@@ -195,7 +195,7 @@ So I counted the modules by hand. A depth-24 model has 24 blocks, each with 6 li
 
 This is the part of NanoChat I would most want to show someone learning distributed training.
 
-The model is never wrapped in PyTorch's `DistributedDataParallel`. Instead, [`GPT.setup_optimizer()`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/nanochat/gpt.py#L374-L414) switches to `DistMuonAdamW` from [`nanochat/optim.py`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/nanochat/optim.py) when the world size exceeds one, and that optimizer does the synchronization itself.
+The model is never wrapped in PyTorch's `DistributedDataParallel`. Instead, [`GPT.setup_optimizer()`](https://github.com/anandnair2005/nanochat/blob/254e524e2df052abe1048ab277a862ad005bc46a/nanochat/gpt.py#L374-L414) switches to `DistMuonAdamW` from [`nanochat/optim.py`](https://github.com/anandnair2005/nanochat/blob/254e524e2df052abe1048ab277a862ad005bc46a/nanochat/optim.py) when the world size exceeds one, and that optimizer does the synchronization itself.
 
 It is a hybrid: AdamW for embeddings, the unembedding and scalar-ish parameters, Muon for the matrix parameters that make up the bulk of the model. The distributed step has three explicit phases:
 
@@ -222,7 +222,7 @@ Fast kernels are useless if the data pipe stalls, and this is the part of the re
 
 Training data is ClimbMix parquet shards. `speedrun.sh` grabs 8 first so tokenizer training can start, then downloads the remaining 170 in the background while tokenizer work proceeds &mdash; even the download is pipelined. `dev/LOG.md` calls the switch from FineWeb-EDU to ClimbMix the single biggest improvement to the speedrun time, 2h46m down to 2h01m, and enough of a gain to move the target from `d26` to `d24`. That is the repository's measurement, not mine.
 
-The runtime loader in [`nanochat/dataloader.py`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/nanochat/dataloader.py) uses BOS-aligned best-fit packing. Every row begins with a BOS token. The inner loop is:
+The runtime loader in [`nanochat/dataloader.py`](https://github.com/anandnair2005/nanochat/blob/254e524e2df052abe1048ab277a862ad005bc46a/nanochat/dataloader.py) uses BOS-aligned best-fit packing. Every row begins with a BOS token. The inner loop is:
 
 1. From the buffered documents, take the **largest** that fits entirely in the remaining space.
 2. Repeat until nothing fits.
@@ -249,7 +249,7 @@ Over-long documents accumulate. The steady-state buffer becomes far more long-ta
 
 Once you see that, the number stops looking like inefficiency. The 34.6% is not the packer doing a bad job. It is the price of insisting that every row starts at a real document boundary while `T` stays fixed &mdash; paid deliberately, so that every training row is dense, fixed-shape, and free of padding tokens the model would otherwise have to learn to ignore.
 
-SFT makes the opposite trade. [`scripts/chat_sft.py`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/scripts/chat_sft.py) uses the same packing, but when no conversation fits it **pads** the row and masks the padding out of the loss. Web text is abundant and interchangeable, so cropping it is cheap; conversations are scarce and structured, and discarding their tails would not be.
+SFT makes the opposite trade. [`scripts/chat_sft.py`](https://github.com/anandnair2005/nanochat/blob/254e524e2df052abe1048ab277a862ad005bc46a/scripts/chat_sft.py) uses the same packing, but when no conversation fits it **pads** the row and masks the padding out of the loss. Web text is abundant and interchangeable, so cropping it is cheap; conversations are scarce and structured, and discarding their tails would not be.
 
 > **What I expect to see** &mdash; Because every row is filled exactly and nothing is padded, total tokens trained should be exactly `iterations × global batch`, with no remainder. For 5,568 iterations at 1,048,576 tokens that is `5,838,471,168` &mdash; and the run should report that number precisely, not approximately.
 
@@ -261,9 +261,9 @@ SFT makes the opposite trade. [`scripts/chat_sft.py`](https://github.com/karpath
 
 Base pretraining dominates the cost, but it is not the whole pipeline, and the later stages are what turn a checkpoint into something you can talk to.
 
-`speedrun.sh` downloads a set of synthetic identity conversations, runs [`scripts/chat_sft.py`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/scripts/chat_sft.py), then runs chat evaluation. SFT loads the base checkpoint, inherits most hyperparameters from its metadata rather than making you restate them, and reuses the same optimizer setup. The data mixture is SmolTalk, the identity conversations, MMLU, GSM8K, SimpleSpelling, and SpellingBee.
+`speedrun.sh` downloads a set of synthetic identity conversations, runs [`scripts/chat_sft.py`](https://github.com/anandnair2005/nanochat/blob/254e524e2df052abe1048ab277a862ad005bc46a/scripts/chat_sft.py), then runs chat evaluation. SFT loads the base checkpoint, inherits most hyperparameters from its metadata rather than making you restate them, and reuses the same optimizer setup. The data mixture is SmolTalk, the identity conversations, MMLU, GSM8K, SimpleSpelling, and SpellingBee.
 
-RL exists &mdash; [`scripts/chat_rl.py`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/scripts/chat_rl.py) is a GRPO/REINFORCE-style loop on GSM8K &mdash; but it is deliberately simple, with no separate critic or reference-policy copies, and sits outside the speedrun path.
+RL exists &mdash; [`scripts/chat_rl.py`](https://github.com/anandnair2005/nanochat/blob/254e524e2df052abe1048ab277a862ad005bc46a/scripts/chat_rl.py) is a GRPO/REINFORCE-style loop on GSM8K &mdash; but it is deliberately simple, with no separate critic or reference-policy copies, and sits outside the speedrun path.
 
 Success for the speedrun is measured as CORE for the base model and ChatCORE after SFT. The target is GPT-2-grade capability: a modest bar by 2026 standards, and a reasonable one for a run meant to cost less than a nice dinner.
 
@@ -317,7 +317,7 @@ Part 2 rents the GPUs and works down the list.
 | Window pattern | `window_pattern`, default `SSSL` | Per-layer attention window; `S` is a quarter of context, `L` is full |
 {: .wide}
 
-Source: [`GPTConfig`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/nanochat/gpt.py#L28-L40) and [`build_model_meta`](https://github.com/karpathy/nanochat/blob/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496/scripts/base_train.py#L130-L144).
+Source: [`GPTConfig`](https://github.com/anandnair2005/nanochat/blob/254e524e2df052abe1048ab277a862ad005bc46a/nanochat/gpt.py#L28-L40) and [`build_model_meta`](https://github.com/anandnair2005/nanochat/blob/254e524e2df052abe1048ab277a862ad005bc46a/scripts/base_train.py#L130-L144).
 
 ## Appendix B &mdash; The `--depth` derivation
 {: #appendix-b}
@@ -354,7 +354,7 @@ Reference-model extrapolation follows [muP](https://arxiv.org/abs/2203.03466)-st
 
 ## References
 
-- Andrej Karpathy, [NanoChat](https://github.com/karpathy/nanochat/tree/be4e002e8e44dbd8c34ce7d38ec8c63fa19ad496).
+- Andrej Karpathy, [NanoChat](https://github.com/karpathy/nanochat).
 - Keller Jordan, [`modded-nanogpt`](https://github.com/KellerJordan/modded-nanogpt).
 - Kaplan et al., [Scaling Laws for Neural Language Models](https://arxiv.org/abs/2001.08361).
 - Hoffmann et al., [Training Compute-Optimal Large Language Models](https://arxiv.org/abs/2203.15556) (Chinchilla).
