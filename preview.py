@@ -477,7 +477,7 @@ def check(path):
         ("no IAL text leaked into output", "{:" not in r),
         (f"h2 headings ({src_h2})", len(re.findall(r"<h2 ", r)) == src_h2),
         ("h2 headings carry the right ids",
-         all(f'h2 id="{i}"' in r for i in src_h2_ids)),
+         all(f'<h2 id="{i}">' in r for i in src_h2_ids)),
         (f"slug rule unchanged ({slug_rule})",
          slug_rule == "appendix-b-the-depth-derivation"),
         (f"explicit ids from IAL ({len(src_ial_ids)})",
