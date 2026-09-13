@@ -405,6 +405,30 @@ def check(path):
     # runs collapse to one hyphen.
     slug_rule = slugify(inline("Appendix B &mdash; The `--depth` derivation"))
 
+    # Root-level HTML pages whose output path must be exact. A site-wide
+    # "permalink" style ending in "/" is applied to pages too, not just posts:
+    # Jekyll appends the suffix to "/:path/:basename", so 404.html is written to
+    # 404/index.html and both GitHub Pages and "jekyll serve" stop finding it.
+    # The page still builds, so nothing fails loudly. Any root page that needs a
+    # literal URL has to declare its own permalink.
+    pages_missing_permalink = []
+    try:
+        with open(os.path.join(HERE, "_config.yml"), encoding="utf-8") as fh:
+            cfg = fh.read()
+        style = re.search(r"^permalink:\s*(\S+)", cfg, re.M)
+        if style and style.group(1).rstrip().endswith("/"):
+            for name in sorted(os.listdir(HERE)):
+                if not name.endswith(".html") or name.startswith("preview-"):
+                    continue
+                if name == "index.html":
+                    continue        # index pages resolve to "/" already
+                with open(os.path.join(HERE, name), encoding="utf-8") as fh:
+                    head = fh.read(400)
+                if head.startswith("---") and not re.search(r"^permalink:", head, re.M):
+                    pages_missing_permalink.append(name)
+    except OSError:
+        pass
+
     # Paragraphs that open with an inline code span or an emphasised phrase.
     # Each of these has been broken by a one-character change to a
     # block-detection regex, and none shows up in a simple count, so compare
@@ -495,6 +519,9 @@ def check(path):
         ("no paragraph truncated at an inline marker", not truncated),
         (f"git tree/blob hashes are full length" + (f" ({sha_bad[0]})" if sha_bad else ""), not sha_bad),
         (f"no transliterated tex inside code fences" + (f" ({tex_in_fence[0]})" if tex_in_fence else ""), not tex_in_fence),
+        ("root html pages pin their own permalink"
+         + (f" ({pages_missing_permalink[0]})" if pages_missing_permalink else ""),
+         not pages_missing_permalink),
     ]
 
     width = max(len(n) for n, _ in results)
