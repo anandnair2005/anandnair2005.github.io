@@ -1,0 +1,12 @@
+{%- comment -%}
+Replaces a per-topic folder. A post declares `series` and `part` in its
+front matter; siblings are discovered by matching the series name, so
+adding Part 3 needs no changes anywhere else.
+{%- endcomment -%}
+{%- assign siblings = site.posts | where: "series", page.series | sort: "part" -%}
+<div class="series-flag">
+  {{ page.series }} &middot; Part {{ page.part }} of {{ siblings | size }}
+  {%- for s in siblings -%}
+    {%- unless s.url == page.url %} &middot; <a href="{{ s.url | relative_url }}">Part {{ s.part }}</a>{% endunless -%}
+  {%- endfor -%}
+</div>

@@ -1,0 +1,19 @@
+---
+layout: default
+---
+<div class="masthead">
+  <div class="wrap">
+    <h1>{{ site.title }}</h1>
+    <p>{{ site.tagline }}</p>
+  </div>
+</div>
+
+<div class="wrap feed">
+  {%- for post in site.posts %}
+    {% include post-card.html post=post %}
+  {%- endfor %}
+
+  {%- if site.posts.size == 0 %}
+  <p class="muted" style="padding:48px 0">No posts yet.</p>
+  {%- endif %}
+</div>

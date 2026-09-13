@@ -1,0 +1,63 @@
+title: Anand Nair
+tagline: Sufficiently advanced technology, taken seriously.
+description: >-
+  Deep dives into AI and software systems: training runs, GPU internals,
+  and the engineering underneath.
+author: Anand Nair
+url: https://anandnair.dev
+baseurl: ""
+
+# jekyll-seo-tag uses this for the publisher logo in structured data, and as
+# the og:image for any page that does not set its own. Without it, sharing the
+# home or about page produces a text-only card.
+logo: /assets/img/avatar.png
+
+# Tells search engines that this site, the GitHub account and the Medium
+# publication are the same author (emitted as schema.org sameAs).
+social:
+  name: Anand Nair
+  links:
+    - https://github.com/anandnair2005
+    - https://medium.com/indistinguishable-from-magic-ai
+
+# Where syndicated copies live. Referenced in the footer only.
+medium_publication: https://medium.com/indistinguishable-from-magic-ai
+github_username: anandnair2005
+
+permalink: /posts/:title/
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - preview-*.html
+  - preview.py
+  # Figure infrastructure and tooling live beside the figures but are not part
+  # of the site. The per-post generators are deliberately NOT excluded: they
+  # assert their numbers against the run log, and being able to read them is
+  # what makes the figures auditable.
+  - figures/figlib.py
+  - figures/figtools.py
+  - "figures/*/build_all.py"
+  - "figures/*/export_png.py"
+  - "figures/*/export-png.html"
+  - "figures/*/png-export-prompt.md"
+  - "**/__pycache__"

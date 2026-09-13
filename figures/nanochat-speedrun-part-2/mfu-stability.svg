@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="825" height="420" viewBox="0 0 660 336" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" role="img" aria-label="Model FLOPs utilisation across 5,568 training steps. Mean 59.66% with a standard deviation of 0.32 once the compile step is excluded.">
+<rect width="660" height="336" fill="#333333"/>
+<text x="28" y="24" font-size="15" fill="#DDDDDD"><tspan fill="#F0AC5F" font-weight="600">98.6%</tspan> of steps land within one point of the mean</text>
+<text x="28.0" y="44.0" font-size="11" fill="#888888" text-anchor="start">5,567 steady-state steps, 0.5-point bins</text>
+<rect x="60.2" y="221.8" width="30.8" height="2.2" rx="2" fill="#58C4DD"/>
+<rect x="187.2" y="220.9" width="30.8" height="3.1" rx="2" fill="#58C4DD"/>
+<rect x="219.0" y="218.2" width="30.8" height="5.8" rx="2" fill="#58C4DD"/>
+<rect x="250.8" y="219.6" width="30.8" height="4.4" rx="2" fill="#58C4DD"/>
+<rect x="282.5" y="218.2" width="30.8" height="5.8" rx="2" fill="#58C4DD"/>
+<rect x="314.2" y="214.1" width="30.8" height="9.9" rx="2" fill="#58C4DD"/>
+<rect x="346.0" y="213.0" width="30.8" height="11.0" rx="2" fill="#58C4DD"/>
+<rect x="377.8" y="206.4" width="30.8" height="17.6" rx="2" fill="#58C4DD"/>
+<rect x="409.5" y="173.8" width="30.8" height="50.2" rx="2" fill="#58C4DD"/>
+<rect x="441.2" y="74.0" width="30.8" height="150.0" rx="2" fill="#F0AC5F"/>
+<rect x="473.0" y="187.3" width="30.8" height="36.7" rx="2" fill="#58C4DD"/>
+<rect x="504.8" y="220.2" width="30.8" height="3.8" rx="2" fill="#58C4DD"/>
+<text x="456.6" y="66.0" font-size="11" fill="#F0AC5F" text-anchor="middle" font-weight="600">4,637 steps</text>
+<line x1="28.0" y1="224.0" x2="536.0" y2="224.0" stroke="#736357" stroke-width="1" opacity="0.5"/>
+<line x1="91.5" y1="224.0" x2="91.5" y2="228.0" stroke="#736357" stroke-width="1" opacity="0.5"/>
+<text x="91.5" y="241.0" font-size="11" fill="#888888" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">54</text>
+<line x1="218.5" y1="224.0" x2="218.5" y2="228.0" stroke="#736357" stroke-width="1" opacity="0.5"/>
+<text x="218.5" y="241.0" font-size="11" fill="#888888" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">56</text>
+<line x1="345.5" y1="224.0" x2="345.5" y2="228.0" stroke="#736357" stroke-width="1" opacity="0.5"/>
+<text x="345.5" y="241.0" font-size="11" fill="#888888" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">58</text>
+<line x1="472.5" y1="224.0" x2="472.5" y2="228.0" stroke="#736357" stroke-width="1" opacity="0.5"/>
+<text x="472.5" y="241.0" font-size="11" fill="#888888" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">60</text>
+<text x="28.0" y="258.0" font-size="11" fill="#888888" text-anchor="start">bf16 MFU, %</text>
+<line x1="554.0" y1="68.0" x2="554.0" y2="230.0" stroke="#736357" stroke-width="1" stroke-dasharray="3 4"/>
+<rect x="570.0" y="218.0" width="12.0" height="6.0" rx="2" fill="#FC6255" opacity="0.75"/>
+<text x="576.0" y="241.0" font-size="11" fill="#FC6255" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">0.92</text>
+<text x="576.0" y="82.0" font-size="11" fill="#FC6255" text-anchor="middle">step 0</text>
+<text x="576.0" y="96.0" font-size="11" fill="#FC6255" text-anchor="middle">compile</text>
+<text x="28.0" y="274.0" font-size="11" fill="#888888" text-anchor="start">mean by quarter of the run</text>
+<rect x="28.0" y="282.0" width="121.0" height="20.0" rx="4" fill="#58C4DD" opacity="0.55"/>
+<text x="88.5" y="296.0" font-size="13" fill="#1a1a1a" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">59.51</text>
+<rect x="157.0" y="282.0" width="121.0" height="20.0" rx="4" fill="#58C4DD" opacity="0.55"/>
+<text x="217.5" y="296.0" font-size="13" fill="#1a1a1a" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">59.67</text>
+<rect x="286.0" y="282.0" width="121.0" height="20.0" rx="4" fill="#58C4DD" opacity="0.55"/>
+<text x="346.5" y="296.0" font-size="13" fill="#1a1a1a" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">59.68</text>
+<rect x="415.0" y="282.0" width="121.0" height="20.0" rx="4" fill="#F0AC5F" opacity="1.0"/>
+<text x="475.5" y="296.0" font-size="13" fill="#1a1a1a" text-anchor="middle" font-weight="600" font-family="ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace">59.79</text>
+<text x="548.0" y="296.0" font-size="11" fill="#F0AC5F" text-anchor="start">rising</text>
+<text x="28.0" y="324.0" font-size="11" fill="#736357" text-anchor="start">mean 59.66%, standard deviation 0.32, minimum 53.91%. The final quarter is the reported 59.79%.</text>
+</svg>
